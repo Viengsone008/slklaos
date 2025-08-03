@@ -31,6 +31,9 @@ export default function Home() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const sections = [
         { id: "hero", ref: heroRef },
@@ -51,6 +54,7 @@ export default function Home() {
       setShowNav(window.scrollY > 0);
       setShowQuoteButton(window.scrollY > 20);
     };
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

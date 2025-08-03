@@ -33,6 +33,9 @@ const About = () => {
   // Scroll progress indicator
   const [scrollProgress, setScrollProgress] = useState(0);
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -79,6 +82,9 @@ const About = () => {
   const [statsAnimated, setStatsAnimated] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined' || !window.IntersectionObserver) return;
+    
     const observer = new window.IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {

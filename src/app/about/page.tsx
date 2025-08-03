@@ -18,6 +18,9 @@ const AboutPage = () => {
   const [activeSection, setActiveSection] = useState('hero');
   const [showNav, setShowNav] = useState(false);
   React.useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -229,6 +232,9 @@ const AboutPage = () => {
   // Parallax state for hero image
   const [parallax, setParallax] = useState(0);
   React.useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const onScroll = () => setParallax(window.scrollY * 0.3);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);

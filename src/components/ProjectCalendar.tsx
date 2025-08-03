@@ -142,6 +142,9 @@ const ProjectCalendar: React.FC = () => {
   };
 
   const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const title = window.prompt('Enter project title:');
     if (title) {
       const newEvent: CalendarEvent = {

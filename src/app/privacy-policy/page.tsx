@@ -1,10 +1,11 @@
+'use client';
 import React from 'react';
-import Navbar from '../app/Navbar';
-import Footer from '../app/Footer';
-import AnimatedSection from '../components/AnimatedSection';
+import Navbar from '../Navbar';
+import Footer from '../Footer';
+import AnimatedSection from '../../components/AnimatedSection';
 import { Shield, Lock, Eye, FileText, CheckCircle, Mail } from 'lucide-react';
 
-const PrivacyPolicyPage = () => {
+export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
       <Navbar />
@@ -48,7 +49,7 @@ const PrivacyPolicyPage = () => {
                 <li>Participate in surveys or promotions</li>
               </ul>
               <p className="text-gray-700">
-                The personal information we collect may include your name, email address, phone number, company name, and any other information you choose to provide.
+                The personal information we may collect includes your name, email address, phone number, company name, project details, and any other information you choose to provide.
               </p>
             </div>
             
@@ -58,92 +59,63 @@ const PrivacyPolicyPage = () => {
                 <h2 className="text-2xl font-bold text-gray-900">How We Use Your Information</h2>
               </div>
               <p className="text-gray-700 mb-4">
-                We may use the information we collect for various purposes, including to:
+                We use the information we collect to:
               </p>
               <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-                <li>Provide, operate, and maintain our website and services</li>
-                <li>Improve, personalize, and expand our website and services</li>
-                <li>Understand and analyze how you use our website</li>
-                <li>Develop new products, services, features, and functionality</li>
-                <li>Communicate with you about our products, services, and promotions</li>
-                <li>Process transactions and send related information</li>
-                <li>Find and prevent fraud</li>
+                <li>Provide and maintain our services</li>
+                <li>Process your requests for quotes and consultations</li>
+                <li>Communicate with you about our services and projects</li>
+                <li>Send you newsletters and marketing communications (with your consent)</li>
+                <li>Improve our website and services</li>
+                <li>Comply with legal obligations</li>
               </ul>
             </div>
             
             <div className="mb-8">
               <div className="flex items-center mb-4">
                 <FileText className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Disclosure of Your Information</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Information Sharing</h2>
               </div>
               <p className="text-gray-700 mb-4">
-                We may share your information in the following situations:
+                We do not sell, trade, or otherwise transfer your personal information to third parties except in the following circumstances:
               </p>
               <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-                <li>With service providers who perform services for us</li>
-                <li>To comply with legal obligations</li>
-                <li>To protect and defend our rights and property</li>
-                <li>With your consent or at your direction</li>
+                <li>With your explicit consent</li>
+                <li>To trusted service providers who assist us in operating our website and conducting our business</li>
+                <li>When required by law or to protect our rights</li>
+                <li>In connection with a business transfer or merger</li>
               </ul>
             </div>
             
             <div className="mb-8">
               <div className="flex items-center mb-4">
                 <CheckCircle className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Your Rights</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Data Security</h2>
               </div>
               <p className="text-gray-700 mb-4">
-                Depending on your location, you may have certain rights regarding your personal information, including:
-              </p>
-              <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
-                <li>The right to access personal information we hold about you</li>
-                <li>The right to request correction of inaccurate information</li>
-                <li>The right to request deletion of your information</li>
-                <li>The right to opt-out of marketing communications</li>
-              </ul>
-              <p className="text-gray-700">
-                To exercise these rights, please contact us using the information provided in the "Contact Us" section below.
+                We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure.
               </p>
             </div>
             
             <div className="mb-8">
               <div className="flex items-center mb-4">
-                <Shield className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Security of Your Information</h2>
-              </div>
-              <p className="text-gray-700 mb-4">
-                We use administrative, technical, and physical security measures to protect your personal information. While we have taken reasonable steps to secure the information you provide to us, please be aware that no security measures are perfect or impenetrable, and we cannot guarantee the security of your information.
-              </p>
-            </div>
-            
-            <div>
-              <div className="flex items-center mb-4">
                 <Mail className="w-6 h-6 text-blue-600 mr-3" />
-                <h2 className="text-2xl font-bold text-gray-900">Contact Us</h2>
+                <h2 className="text-2xl font-bold text-gray-900">Contact Information</h2>
               </div>
               <p className="text-gray-700 mb-4">
-                If you have questions or concerns about this Privacy Policy, please contact us at:
+                If you have any questions about this Privacy Policy, please contact us:
               </p>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-gray-700">SLK Trading & Design Construction Co., Ltd</p>
-                <p className="text-gray-700">Vientiane Capital, Laos</p>
-                <p className="text-gray-700">Email: info@slklaos.la</p>
-                <p className="text-gray-700">Phone: +856 21 773 737</p>
+                <p className="text-gray-700 mb-2"><strong>Email:</strong> info@slklaos.la</p>
+                <p className="text-gray-700 mb-2"><strong>Phone:</strong> +856 21 773 737</p>
+                <p className="text-gray-700"><strong>Address:</strong> Vientiane, Laos</p>
               </div>
             </div>
           </AnimatedSection>
         </div>
-        
-        <AnimatedSection animation="fade-up" delay={200} className="text-center mb-12">
-          <p className="text-gray-600">
-            Last updated: June 22, 2025
-          </p>
-        </AnimatedSection>
       </div>
       
       <Footer />
     </div>
   );
-};
-
-export default PrivacyPolicyPage;
+}

@@ -286,23 +286,23 @@ const Footer = () => {
                 </p>
                 <div className="flex space-x-6 text-sm">
                   <button 
-                    onClick={() => navigate('/privacy-policy')}
+                    onClick={() => handleLinkClick('/privacy-policy')}
                     className="text-gray-400 hover:text-[#6dbeb0] transition-colors duration-300"
                   >
                     Privacy Policy
                   </button>
                   <button 
-                    onClick={() => navigate('/terms-of-service')}
+                    onClick={() => handleLinkClick('/terms-of-service')}
                     className="text-gray-400 hover:text-[#6dbeb0] transition-colors duration-300"
                   >
                     Terms of Service
                   </button>
-                  {/* <button 
-                    onClick={() => navigate('/sitemap')}
+                  <button 
+                    onClick={() => handleLinkClick('/sitemap')}
                     className="text-gray-400 hover:text-[#6dbeb0] transition-colors duration-300"
                   >
                     Sitemap
-                  </button> */} 
+                  </button>
                 </div>
               </div>
             </AnimatedSection>

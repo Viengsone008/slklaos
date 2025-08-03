@@ -7,6 +7,9 @@ const WhatsAppChatButton = () => {
   const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       const scrollY = window.scrollY || window.pageYOffset;
       const halfScreen = window.innerHeight / 2;
