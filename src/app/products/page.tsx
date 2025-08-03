@@ -7,8 +7,8 @@ import QuoteModal from '../../components/QuoteModal';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../lib/supabase';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import WhatsAppChatButton from '../../components/WhatsAppChatButton';
 import FloatingQuoteButton from '../../components/FloatingQuoteButton';
 

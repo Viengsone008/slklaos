@@ -17,8 +17,8 @@ import {
 } from 'lucide-react';
 
 import AnimatedSection from '../../components/AnimatedSection';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { supabase } from '../../lib/supabase';

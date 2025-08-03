@@ -101,10 +101,10 @@ import { Building2, Shield, Layers, CheckCircle, ArrowRight, Star, Award, Users,
 import AnimatedSection from '../../components/AnimatedSection';
 import QuoteModal from '../../components/QuoteModal';
 import { useLanguage } from '../../contexts/LanguageContext';
-import ContactForm from '../ContactForm';
+import ContactForm from '../../components/ContactForm';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 
 const ServicesPage = () => { 
   // Section refs for floating nav

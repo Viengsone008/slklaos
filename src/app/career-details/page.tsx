@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "../../lib/supabase";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import ApplicationModal from "../../components/admin/ApplicationModal";
 import { 
   UploadCloud, 

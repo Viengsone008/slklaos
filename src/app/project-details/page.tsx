@@ -19,8 +19,8 @@ import {
   Instagram,
   Loader2,
 } from 'lucide-react';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import Head from 'next/head';
 import AnimatedSection from '../../components/AnimatedSection';
 import QuoteModal from '../../components/QuoteModal';

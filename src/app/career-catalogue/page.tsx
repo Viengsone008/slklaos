@@ -14,8 +14,8 @@ import {
   Users,
   DollarSign
 } from 'lucide-react';
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import AnimatedSection from "../../components/AnimatedSection";
 import { supabase } from "../../lib/supabase";
 

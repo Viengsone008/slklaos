@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import Navbar from '../Navbar';
-import Footer from '../Footer';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
 import AnimatedSection from '../../components/AnimatedSection';
 import { Home, Building2, Package, FileText, Users, Phone, Mail, Shield, Layers } from 'lucide-react';
 

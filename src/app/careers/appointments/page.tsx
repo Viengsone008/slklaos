@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Calendar, Clock, User } from "lucide-react";
-import Navbar from "@/app/Navbar";
-import Footer from "@/app/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 // --- Hero Section Component - Luxury Upgrade ---
 const HeroSection = () => (

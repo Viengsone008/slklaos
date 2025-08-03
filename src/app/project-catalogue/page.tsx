@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 
 import { supabase } from "../../lib/supabase";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import QuoteModal from "../../components/QuoteModal";
 import AnimatedSection from "../../components/AnimatedSection";
 
