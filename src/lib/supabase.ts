@@ -13,12 +13,12 @@ console.log('🔍 Supabase Environment Check:', {
  
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('❌ Missing Supabase environment variables:', {
-    VITE_SUPABASE_URL: supabaseUrl || 'MISSING',
-    VITE_SUPABASE_ANON_KEY: supabaseAnonKey ? 'PRESENT' : 'MISSING'
+    NEXT_PUBLIC_SUPABASE_URL: supabaseUrl || 'MISSING',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: supabaseAnonKey ? 'PRESENT' : 'MISSING'
   })
   throw new Error(`Missing Supabase environment variables. Please check your .env file contains:
-    VITE_SUPABASE_URL=${supabaseUrl || 'MISSING'}
-    VITE_SUPABASE_ANON_KEY=${supabaseAnonKey ? 'PRESENT' : 'MISSING'}`)
+    NEXT_PUBLIC_SUPABASE_URL=${supabaseUrl || 'MISSING'}
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=${supabaseAnonKey ? 'PRESENT' : 'MISSING'}`)
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
