@@ -1,0 +1,60 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Start Next.js Development Server",
+            "command": "npm",
+            "args": [
+                "run",
+                "dev"
+            ],
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Build Next.js Project",
+            "command": "npm",
+            "args": [
+                "run",
+                "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "Start Production Server",
+            "command": "npm",
+            "args": [
+                "run",
+                "start"
+            ],
+            "group": "build",
+            "dependsOn": "Build Next.js Project",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Lint Code",
+            "command": "npm",
+            "args": [
+                "run",
+                "lint"
+            ],
+            "group": "test",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
+        }
+    ]
+}
