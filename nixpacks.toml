@@ -8,7 +8,13 @@ nixPkgs = ["nodejs-20_x", "npm-10_x"]
 cmds = ["npm ci"]
 
 [phases.build]
-cmds = ["npm run build"]
+dependsOn = ["install"]
+cmds = [
+  "echo 'Environment variables during build:'",
+  "echo NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL",
+  "echo NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:0:20}...",
+  "npm run build"
+]
 
 [start]
 cmd = "npm start"
