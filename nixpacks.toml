@@ -1,20 +1,15 @@
+# Force Node.js 20 for Railway deployment
 [variables]
-NODE_VERSION = "20.18.0"
+NODE_VERSION = "20"
 
 [phases.setup]
-nixPkgs = ["nodejs-20_x", "npm-10_x"]
+nixPkgs = ["nodejs_20", "npm-10_x"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm install"]
 
 [phases.build]
-dependsOn = ["install"]
-cmds = [
-  "echo 'Environment variables during build:'",
-  "echo NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL",
-  "echo NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY:0:20}...",
-  "npm run build"
-]
+cmds = ["npm run build"]
 
 [start]
 cmd = "npm start"
