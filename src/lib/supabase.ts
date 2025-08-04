@@ -25,6 +25,10 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce',
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    storageKey: 'slk-auth-token',
   },
   // Add global performance options for better international access
   global: {
@@ -41,8 +45,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   db: {
     // Reduce schema caching time for better performance
     schema: 'public',
-    // Disable automatic schema fetching to reduce initial load time
-    autoRefreshToken: false
   },
   // Add realtime performance options
   realtime: {
@@ -62,7 +64,7 @@ supabase.from('settings').select('count').limit(1).then(
       console.log('✅ Supabase connection successful')
     }
   }
-).catch(err => {
+).catch((err: any) => {
   console.warn('⚠️ Supabase connection test error:', err.message)
 })
 
