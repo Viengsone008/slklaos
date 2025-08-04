@@ -382,33 +382,125 @@ const handleDownloadCatalog = () => {
             </div>
           </AnimatedSection>
 
-          {/* CTA Section */}
-          <AnimatedSection animation="fade-up" delay={600} className="text-center mt-16">
-            <div className="bg-[#6dbeb0] text-white p-12 rounded-3xl">
-              <AnimatedSection animation="fade-up">
-                <h3 className="text-3xl font-bold mb-4">
-                  Need Construction Materials?
-                </h3>
-                <p className="text-xl text-light mb-8 max-w-2xl mx-auto">
-                  Contact us for premium waterproofing and flooring materials with expert advice
-                </p>
-              </AnimatedSection>
-              <AnimatedSection animation="scale" delay={200}>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button 
-                    onClick={() => setIsQuoteModalOpen(true)}
-                    className="bg-[#1b3d5a] hover:bg-tertiary text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    Get Product Quote
-                  </button>
-                  <button 
-                    onClick={handleDownloadCatalog}
-                    className="bg-[#e5f1f1] border-2 border-white/30 hover:bg-white/10 text-[#1b3d5a] px-8 py-4 rounded-lg font-semibold transition-all duration-300"
-                  >
-                   Our Products Catalogue
-                  </button>
+          {/* Enhanced CTA Section */}
+          <AnimatedSection animation="fade-up" delay={600} className="mt-20">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#1b3d5a] via-[#3d9392] to-[#6dbeb0] rounded-3xl shadow-2xl">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 left-0 w-full h-full" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                  backgroundSize: '60px 60px'
+                }}></div>
+              </div>
+              
+              {/* Floating Elements */}
+              <div className="absolute top-8 right-8 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
+              <div className="absolute bottom-8 left-8 w-16 h-16 bg-white/10 rounded-full blur-lg"></div>
+              
+              <div className="relative z-10 p-12 lg:p-16">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Content Side */}
+                  <div className="text-center lg:text-left">
+                    <AnimatedSection animation="fade-up">
+                      <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                        <Building2 className="w-5 h-5 text-white mr-2" />
+                        <span className="text-white font-medium">Premium Materials</span>
+                      </div>
+                      <h3 className="text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+                        Need Construction <span className="text-[#e5f1f1]">Materials?</span>
+                      </h3>
+                      <p className="text-xl text-white/90 mb-8 leading-relaxed">
+                        Contact us for premium waterproofing and flooring materials with expert advice and competitive pricing
+                      </p>
+                    </AnimatedSection>
+                    
+                    {/* Feature List */}
+                    <AnimatedSection animation="fade-up" delay={200}>
+                      <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                        {[
+                          { icon: Shield, text: "Premium Quality Guarantee" },
+                          { icon: Truck, text: "Fast Delivery Service" },
+                          { icon: Award, text: "Expert Technical Support" },
+                          { icon: CheckCircle, text: "Competitive Pricing" }
+                        ].map((feature, index) => {
+                          const IconComponent = feature.icon;
+                          return (
+                            <AnimatedSection key={index} animation="fade-right" delay={300 + (index * 100)}>
+                              <div className="flex items-center text-white/90">
+                                <IconComponent className="w-5 h-5 text-[#e5f1f1] mr-3 flex-shrink-0" />
+                                <span className="text-sm font-medium">{feature.text}</span>
+                              </div>
+                            </AnimatedSection>
+                          );
+                        })}
+                      </div>
+                    </AnimatedSection>
+
+                    <AnimatedSection animation="scale" delay={400}>
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button 
+                          onClick={() => setIsQuoteModalOpen(true)}
+                          className="group bg-white text-[#1b3d5a] px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl relative overflow-hidden"
+                        >
+                          <span className="relative z-10 flex items-center justify-center">
+                            Get Product Quote
+                            <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#e5f1f1] to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </button>
+                        <button 
+                          onClick={handleDownloadCatalog}
+                          className="bg-white/20 backdrop-blur-sm border-2 border-white/30 hover:bg-white/30 text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                        >
+                          View Products Catalogue
+                        </button>
+                      </div>
+                    </AnimatedSection>
+                  </div>
+
+                  {/* Stats/Visual Side */}
+                  <div className="text-center lg:text-right">
+                    <AnimatedSection animation="fade-left" delay={200}>
+                      <div className="grid grid-cols-2 gap-6">
+                        {/* Stat Cards */}
+                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                          <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
+                            <AnimatedCounter value={500} />+
+                          </div>
+                          <div className="text-white/80 text-sm font-medium">Projects Supplied</div>
+                        </div>
+                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                          <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
+                            <AnimatedCounter value={50} />+
+                          </div>
+                          <div className="text-white/80 text-sm font-medium">Product Types</div>
+                        </div>
+                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                          <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
+                            <AnimatedCounter value={24} />/7
+                          </div>
+                          <div className="text-white/80 text-sm font-medium">Support Available</div>
+                        </div>
+                        <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                          <div className="text-3xl lg:text-4xl font-bold text-white mb-2">
+                            <AnimatedCounter value={100} />%
+                          </div>
+                          <div className="text-white/80 text-sm font-medium">Quality Assured</div>
+                        </div>
+                      </div>
+                    </AnimatedSection>
+                    
+                    {/* Contact Info */}
+                    <AnimatedSection animation="fade-up" delay={600}>
+                      <div className="mt-8 bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                        <div className="text-white/90 text-sm mb-2">Quick Contact</div>
+                        <div className="text-white font-semibold text-lg">+856 21 773 737</div>
+                        <div className="text-white/80 text-sm">Available 24/7 for urgent inquiries</div>
+                      </div>
+                    </AnimatedSection>
+                  </div>
                 </div>
-              </AnimatedSection>
+              </div>
             </div>
           </AnimatedSection>
         </div>
