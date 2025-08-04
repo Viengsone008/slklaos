@@ -28,6 +28,7 @@ import { Award, Users, Target, Clock } from 'lucide-react';
 import AnimatedSection from '../components/AnimatedSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const About = () => {
   // Scroll progress indicator
@@ -127,10 +128,6 @@ const About = () => {
     }
   ];
 
-  const handleLearnMore = () => {
-    router.push('/about');
-  };
-
   return (
     <>
       {/* Scroll Progress Bar */}
@@ -197,14 +194,23 @@ const About = () => {
                 
                 {/* Learn More Button */}
                 <AnimatedSection animation="scale" delay={350} repeatOnScroll={true}>
-                  <button 
-                    onClick={handleLearnMore}
-                    className="bg-white/60 glass-morphism backdrop-blur-lg border border-[#6dbeb0]/40 hover:bg-[#3d9392]/90 hover:text-white text-[#21706e] px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 shadow-xl relative overflow-hidden ripple focus:outline-none focus:ring-2 focus:ring-[#6dbeb0]"
-                    aria-label="Learn more about SLK Trading & Design Construction"
-                  >
-                    Learn More About Us
-                    <span className="absolute inset-0 pointer-events-none" />
-                  </button>
+                  <Link href="/about">
+                    <button 
+                      className="group relative bg-white/60 glass-morphism backdrop-blur-lg border-2 border-[#6dbeb0]/40 hover:border-[#6dbeb0] hover:bg-[#6dbeb0] hover:text-white text-[#21706e] px-8 py-4 rounded-xl font-bold text-lg transition-all duration-500 ease-out transform hover:scale-110 hover:shadow-2xl shadow-xl overflow-hidden focus:outline-none focus:ring-4 focus:ring-[#6dbeb0]/50 active:scale-95"
+                      aria-label="Learn more about SLK Trading & Design Construction"
+                    >
+                      <span className="relative z-10 flex items-center">
+                        Learn More About Us
+                        <svg className="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </span>
+                      {/* Animated background gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#6dbeb0] via-[#3d9392] to-[#1b3d5a] opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl"></div>
+                      {/* Shimmer effect */}
+                      <div className="absolute inset-0 -top-2 -left-2 w-2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 opacity-0 group-hover:opacity-100 group-hover:animate-shimmer"></div>
+                    </button>
+                  </Link>
                 </AnimatedSection>
               </div>
             </AnimatedSection>
