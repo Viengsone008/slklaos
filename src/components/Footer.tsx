@@ -297,12 +297,7 @@ const Footer = () => {
                   >
                     Terms of Service
                   </button>
-                  <button 
-                    onClick={() => handleLinkClick('/sitemap')}
-                    className="text-gray-400 hover:text-[#6dbeb0] transition-colors duration-300"
-                  >
-                    Sitemap
-                  </button>
+                  {/* Sitemap link removed */}
                 </div>
               </div>
             </AnimatedSection>

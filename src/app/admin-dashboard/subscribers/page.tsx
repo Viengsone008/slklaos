@@ -17,7 +17,9 @@ import {
   Clock,
   Calendar,
   Send,
-  AlertCircle
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { useDatabase } from '../../../contexts/DatabaseContext';
 import { useAuth } from "../../../contexts/AuthContext";
@@ -64,6 +66,10 @@ const SubscriberManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [sourceFilter, setSourceFilter] = useState('all');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const subscribersPerPage = 15;
   
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingSubscriber, setEditingSubscriber] = useState<Subscriber | null>(null);
@@ -349,6 +355,16 @@ const SubscriberManagement = () => {
     
     return matchesSearch && matchesStatus && matchesSource;
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredSubscribers.length / subscribersPerPage);
+  const startIndex = (currentPage - 1) * subscribersPerPage;
+  const currentSubscribers = filteredSubscribers.slice(startIndex, startIndex + subscribersPerPage);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, sourceFilter]);
 
   const getStatusColor = (status: string = '') => {
     switch (status) {
@@ -760,6 +776,14 @@ const SubscriberManagement = () => {
 
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+          <p className="text-sm text-gray-600">
+            Showing {currentSubscribers.length} of {filteredSubscribers.length} subscribers
+            {filteredSubscribers.length !== subscribers.length && ` (filtered from ${subscribers.length} total)`}
+            • 15 per page
+          </p>
+        </div>
          <div className="grid lg:grid-cols-4 gap-8">
           {/* Search */}
           <div className="relative">
@@ -842,7 +866,7 @@ const SubscriberManagement = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredSubscribers.map((subscriber) => (
+                {currentSubscribers.map((subscriber) => (
                   <tr key={subscriber.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div 
@@ -909,6 +933,112 @@ const SubscriberManagement = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {filteredSubscribers.length > subscribersPerPage && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 px-6 py-4 mt-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-sm text-gray-700">
+              <span>
+                Showing {startIndex + 1} to {Math.min(startIndex + subscribersPerPage, filteredSubscribers.length)} of {filteredSubscribers.length} subscribers
+              </span>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                  currentPage === 1
+                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              <div className="hidden sm:flex items-center space-x-1">
+                {/* First page */}
+                {totalPages > 1 && (
+                  <button
+                    onClick={() => setCurrentPage(1)}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      currentPage === 1
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    1
+                  </button>
+                )}
+
+                {/* Ellipsis if needed */}
+                {currentPage > 3 && totalPages > 5 && (
+                  <span className="px-2 py-2 text-gray-500">...</span>
+                )}
+
+                {/* Pages around current */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(page => {
+                    if (totalPages <= 5) return page > 1 && page < totalPages;
+                    if (currentPage <= 3) return page > 1 && page <= 4 && page < totalPages;
+                    if (currentPage >= totalPages - 2) return page >= totalPages - 3 && page > 1 && page < totalPages;
+                    return page >= currentPage - 1 && page <= currentPage + 1;
+                  })
+                  .map(page => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        currentPage === page
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ))}
+
+                {/* Ellipsis if needed */}
+                {currentPage < totalPages - 2 && totalPages > 5 && (
+                  <span className="px-2 py-2 text-gray-500">...</span>
+                )}
+
+                {/* Last page */}
+                {totalPages > 1 && (
+                  <button
+                    onClick={() => setCurrentPage(totalPages)}
+                    className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                      currentPage === totalPages
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {totalPages}
+                  </button>
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                  currentPage === totalPages
+                    ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Modal */}
       {deleteConfirmModalOpen && (

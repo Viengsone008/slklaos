@@ -334,23 +334,7 @@ const handleDownloadCatalog = () => {
               );
             })}
           </div>
-          {/* Animated Product Stats Section */}
-          <AnimatedSection animation="fade-up" delay={200} className="mt-24 mb-20">
-            <div className="flex flex-wrap justify-center gap-12 bg-gradient-to-r from-gold/10 to-yellow-100 rounded-3xl p-10 border border-gold/30 luxury-shadow">
-              <div className="flex flex-col items-center">
-                <span className="text-4xl font-bold text-gold mb-2 luxury-font"><AnimatedCounter value={15} /></span>
-                <span className="text-lg text-gray-700 luxury-font">Years Warranty</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-4xl font-bold text-gold mb-2 luxury-font"><AnimatedCounter value={120} /></span>
-                <span className="text-lg text-gray-700 luxury-font">Projects Completed</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-4xl font-bold text-gold mb-2 luxury-font"><AnimatedCounter value={8} /></span>
-                <span className="text-lg text-gray-700 luxury-font">Countries Supplied</span>
-              </div>
-            </div>
-          </AnimatedSection>
+          
 
 
 

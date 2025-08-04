@@ -1,4 +1,20 @@
 /* --- Hero Section Animations & Effects --- */
+/* 3D Parallax Effects */
+.hero-3d-container {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  overflow: hidden;
+}
+
+.hero-3d-layer {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.hero-3d-smooth {
+  transition: transform 0.1s ease-out;
+}
+
 .ripple {
   position: absolute;
   border-radius: 50%;
@@ -40,6 +56,61 @@
 .hero-btn-glow:focus-visible, .hero-btn-glow:active {
   box-shadow: 0 0 16px 4px #bfa76a80;
 }
+
+/* Floating Animation for Testimonials */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Glassmorphism Effects for Luxury Modal */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer-old {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.glass-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+.backdrop-luxury {
+  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+/* Enhanced blur utilities */
+.backdrop-blur-3xl {
+  backdrop-filter: blur(64px);
+}
+
+.backdrop-blur-4xl {
+  backdrop-filter: blur(128px);
+}
+
+/* Line clamp utility */
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

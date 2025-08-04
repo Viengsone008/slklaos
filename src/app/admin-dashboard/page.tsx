@@ -549,7 +549,7 @@ const AdminDashboard = () => {
         {/* Welcome Section */}
         <AnimatedSection animation="fade-down" delay={100} duration={600}>
           <div className="mb-8">
-            <div className="bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
+            <div className="bg-gradient-to-r from-[#1b3d5a] via-blue-300 to-indigo-700 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSI0Ii8+PC9nPjwvZz48L3N2Zz4=')]"></div>
               </div>
@@ -723,28 +723,44 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="h-screen bg-slate-50 flex overflow-hidden">
       {/* Sidebar */}
       <div className={`bg-white shadow-xl border-r border-slate-200 transition-all duration-300 ${
         sidebarOpen ? 'w-80' : 'w-20'
-      } ${isMobile ? 'fixed inset-y-0 left-0 z-50' : 'relative'}`}>
+      } ${isMobile ? 'fixed inset-y-0 left-0 z-50' : 'relative'} flex flex-col`}>
         
         {/* Sidebar Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-200">
           {sidebarOpen ? (
-            <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-lg">
-                <Building2 className="w-6 h-6 text-white" />
+            <button 
+              onClick={handleGoHome}
+              className="flex items-center space-x-3 hover:bg-slate-50 rounded-lg p-2 -m-2 transition-colors cursor-pointer"
+              title="Go to Homepage"
+            >
+              <div className="flex-shrink-0">
+                <img 
+                  src="/SLK-logo.png" 
+                  alt="SLK Logo" 
+                  className="w-10 h-10 object-contain rounded-lg"
+                />
               </div>
               <div>
                 <h2 className="text-lg font-bold text-slate-900">SLK Admin</h2>
                 <p className="text-xs text-slate-500">Trading & Construction</p>
               </div>
-            </div>
+            </button>
           ) : (
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 p-2 rounded-lg">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
+            <button 
+              onClick={handleGoHome}
+              className="flex-shrink-0 hover:bg-slate-50 rounded-lg p-2 -m-2 transition-colors cursor-pointer"
+              title="Go to Homepage"
+            >
+              <img 
+                src="/SLK-logo.png" 
+                alt="SLK Logo" 
+                className="w-8 h-8 object-contain rounded-lg"
+              />
+            </button>
           )}
           
           <button
@@ -804,7 +820,7 @@ const AdminDashboard = () => {
 
         {/* Sidebar Footer */}
         <div className="p-4 border-t border-slate-200">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 mb-4">
             {sidebarOpen ? (
               <>
                 <div className="flex-1 min-w-0">
@@ -829,6 +845,44 @@ const AdminDashboard = () => {
               </button>
             )}
           </div>
+          
+          {/* Professional Footer */}
+          {sidebarOpen && (
+            <div className="border-t border-slate-100 pt-4">
+              <div className="text-center space-y-2">
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <img 
+                    src="/SLK-logo.png" 
+                    alt="SLK Logo" 
+                    className="w-6 h-6 object-contain"
+                  />
+                  <span className="text-sm font-bold text-slate-700">SLK Trading & Construction</span>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Professional construction and trading solutions in Laos
+                </p>
+                <div className="flex items-center justify-center space-x-4 text-xs text-slate-400 mt-3">
+                  <span>© 2025 SLK</span>
+                  <span>•</span>
+                  <span>Admin Panel v2.0</span>
+                </div>
+                <div className="flex items-center justify-center space-x-3 mt-3">
+                  <div className={`w-2 h-2 rounded-full ${isOnline ? 'bg-green-400' : 'bg-red-400'}`}></div>
+                  <span className="text-xs text-slate-500">
+                    {isOnline ? 'Online' : 'Offline'}
+                  </span>
+                  {lastSyncTime && (
+                    <>
+                      <span className="text-slate-300">•</span>
+                      <span className="text-xs text-slate-400">
+                        Synced {new Date(lastSyncTime).toLocaleTimeString()}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -841,9 +895,9 @@ const AdminDashboard = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-screen">
         {/* Top Header */}
-        <div className="bg-white border-b border-slate-200 px-8 py-6">
+        <div className="bg-white border-b border-slate-200 px-8 py-6 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold text-slate-900">
@@ -882,9 +936,11 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-8">
-          {renderPageContent()}
+        {/* Page Content - Scrollable Area */}
+        <div className="flex-1 overflow-y-auto bg-slate-50">
+          <div className="p-8">
+            {renderPageContent()}
+          </div>
         </div>
       </div>
 

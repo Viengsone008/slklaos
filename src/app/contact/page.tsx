@@ -22,8 +22,9 @@ const serviceToDepartment: Record<string, string> = {
 };
 
 const ContactPage = () => {
-  // Scroll progress indicator
+  // Scroll progress indicator and 3D effects
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [showNav, setShowNav] = useState(false);
   useEffect(() => {
@@ -32,9 +33,10 @@ const ContactPage = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
+      setScrollY(scrollTop);
       setShowNav(window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const router = useRouter();
@@ -316,22 +318,84 @@ const ContactPage = () => {
       </div>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+        <style jsx global>{`
+          .perspective-1000 {
+            perspective: 1000px;
+          }
+          .preserve-3d {
+            transform-style: preserve-3d;
+          }
+          .luxury-card-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(191, 167, 106, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(191, 167, 106, 0.37);
+          }
+          .shadow-gold {
+            box-shadow: 0 25px 50px -12px rgba(191, 167, 106, 0.25), 0 0 0 1px rgba(191, 167, 106, 0.05);
+          }
+          .luxury-gradient-text {
+            background: linear-gradient(135deg, #bfa76a 0%, #e5e2d6 50%, #bfa76a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .luxury-gold-text {
+            color: #f7f0cfff;
+            text-shadow: 0 0 25px rgba(246, 242, 225, 0.7), 0 0 50px rgba(241, 233, 201, 0.4);
+          }
+          .luxury-fade-text {
+            background: linear-gradient(135deg, #3d3935 0%, #5a5550 50%, #3d3935 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .drop-shadow-gold {
+            filter: drop-shadow(0 4px 8px rgba(220, 211, 179, 0.4)) drop-shadow(0 2px 4px rgba(227, 219, 184, 0.25)) drop-shadow(0 0 15px rgba(226, 217, 184, 0.5));
+          }
+        `}</style>
         {/* Hero Section */}
-        <section className="relative py-36 bg-gradient-to-br from-[#e5e2d6] via-[#bfa76a]/30 to-[#3d9392]/20 text-white overflow-hidden luxury-card-glass shadow-gold">
-          <div className="absolute inset-0">
+        <section className="relative py-36 bg-gradient-to-br from-[#e5e2d6] via-[#bfa76a]/30 to-[#3d9392]/20 text-white overflow-hidden luxury-card-glass shadow-gold perspective-1000">
+          <div 
+            className="absolute inset-0 preserve-3d"
+            style={{
+              transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0002}) rotateX(${scrollY * 0.02}deg)`,
+              willChange: 'transform'
+            }}
+          >
             <img 
               src="https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Contact_us_Hero.png" 
               alt="Contact SLK Trading"
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover opacity-90"
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#bfa76a]/80 via-[#e5e2d6]/60 to-[#3d9392]/80"></div>
-            <div className="absolute inset-0 bg-white/30 backdrop-blur-xl"></div>
           </div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-br from-[#bfa76a]/80 via-[#e5e2d6]/60 to-[#3d9392]/80 preserve-3d"
+            style={{
+              transform: `translateZ(10px) translateY(${scrollY * 0.3}px)`,
+              willChange: 'transform'
+            }}
+          ></div>
+          <div 
+            className="absolute inset-0 bg-white/30 backdrop-blur-xl preserve-3d"
+            style={{
+              transform: `translateZ(20px) translateY(${scrollY * 0.2}px)`,
+              willChange: 'transform'
+            }}
+          ></div>
 
           <div className="relative z-10 container mx-auto px-4">
-            <AnimatedSection className="text-center max-w-4xl mx-auto luxury-card-glass bg-white/60 rounded-3xl p-12 shadow-gold border-2 border-[#bfa76a]/30 backdrop-blur-2xl">
-              <h1 className="text-5xl lg:text-7xl font-extrabold mb-4 luxury-gradient-text drop-shadow-[0_6px_32px_rgba(191,167,106,0.55)]">
-                <span className="luxury-gold-text luxury-fade-text drop-shadow-gold">Contact Us</span>
+            <div 
+              className="preserve-3d"
+              style={{
+                transform: `translateZ(30px) translateY(${scrollY * 0.1}px)`,
+                willChange: 'transform'
+              }}
+            >
+              <AnimatedSection className="text-center max-w-4xl mx-auto luxury-card-glass bg-white/60 rounded-3xl p-12 shadow-gold border-2 border-[#bfa76a]/30 backdrop-blur-2xl">
+              <h1 className="text-5xl lg:text-7xl font-extrabold mb-4 drop-shadow-[0_6px_32px_rgba(191,167,106,0.55)]">
+                <span className="luxury-gold-text drop-shadow-gold">Contact Us</span>
               </h1>
               <div className="flex justify-center mb-6">
                 <div className="h-1 w-32 bg-gradient-to-r from-[#bfa76a] via-[#e5e2d6] to-[#bfa76a] rounded-full shadow-gold"></div>
@@ -362,6 +426,7 @@ const ContactPage = () => {
                 </div>
               </div>
             </AnimatedSection>
+            </div>
           </div>
         </section>
 
@@ -628,40 +693,165 @@ const ContactPage = () => {
                   </div>
                 </AnimatedSection>
 
-                {/* Office Locations */}
-                <AnimatedSection animation="fade-left" delay={400}>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Locations</h3>
-                  <div className="space-y-4">
-                    {officeLocations.map((office, index) => (
-                      <div key={index} className="bg-white/80 p-4 rounded-xl shadow-gold border-2 border-[#bfa76a]/20 luxury-card-glass backdrop-blur-xl">
-                        <h4 className="font-semibold text-gray-900 mb-2">{office.name}</h4>
-                        <div className="space-y-1 text-sm text-gray-600">
-                          <p className="flex items-center">
-                            <MapPin className="w-4 h-4 mr-2 text-[#6dbeb0]" />
-                            {office.address}
-                          </p>
-                          <p className="flex items-center">
-                            <Phone className="w-4 h-4 mr-2 text-[#6dbeb0]" />
-                            {office.phone}
-                          </p>
-                          <p className="flex items-center">
-                            <Mail className="w-4 h-4 mr-2 text-[#6dbeb0]" />
-                            {office.email}
-                          </p>
-                          <p className="flex items-center">
-                            <Clock className="w-4 h-4 mr-2 text-[#6dbeb0]" />
-                            {office.hours}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </AnimatedSection>
+                
               </div>
             </div>
           </div>
         </section>
 
+        
+
+        {/* Get a Quote Section */}
+        <section className="py-20 bg-gradient-to-br from-[#e5e2d6] via-white to-[#bfa76a]/20">
+          <div className="container mx-auto px-4">
+            <AnimatedSection className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+                Ready to Start Your <span className="text-yellow-400">Project?</span>
+              </h2>
+              <div className="flex justify-center mb-6">
+                <div className="h-1 w-32 bg-gradient-to-r from-[#bfa76a] via-[#e5e2d6] to-[#bfa76a] rounded-full shadow-gold"></div>
+              </div>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
+                Get a detailed quote for your construction, waterproofing, or flooring project. 
+                Our experts will provide you with a comprehensive proposal tailored to your needs.
+              </p>
+            </AnimatedSection>
+            {/* Call to Action */}
+            <AnimatedSection animation="fade-up" delay={500} className="text-center mt-16">
+              <div className="bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] rounded-2xl p-10 text-[#3d3935] relative overflow-hidden">
+                {/* Background decorative elements */}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12"></div>
+                
+                <div className="relative z-10">
+                  <div className="mb-6">
+                    <div className="bg-white/20 p-4 rounded-full inline-flex mb-4">
+                      <Star className="w-8 h-8 text-[#3d3935]" />
+                    </div>
+                    <h3 className="text-3xl lg:text-4xl font-bold mb-4">Ready to Work With Us?</h3>
+                    <p className="text-lg lg:text-xl mb-8 max-w-3xl mx-auto leading-relaxed">
+                      Join <span className="font-bold">500+</span> satisfied customers who have trusted SLK Trading & Design Construction 
+                      with their most important projects. From concept to completion, we deliver excellence.
+                    </p>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div className="text-center">
+                      <div className="text-2xl lg:text-3xl font-bold text-[#3d3935] mb-1">500+</div>
+                      <div className="text-sm text-[#3d3935]/80">Projects Completed</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl lg:text-3xl font-bold text-[#3d3935] mb-1">15+</div>
+                      <div className="text-sm text-[#3d3935]/80">Years Experience</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl lg:text-3xl font-bold text-[#3d3935] mb-1">98%</div>
+                      <div className="text-sm text-[#3d3935]/80">Client Satisfaction</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl lg:text-3xl font-bold text-[#3d3935] mb-1">24/7</div>
+                      <div className="text-sm text-[#3d3935]/80">Support Available</div>
+                    </div>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                      onClick={() => setIsQuoteModalOpen(true)}
+                      className="bg-[#3d9392] hover:bg-[#6dbeb0] text-white px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center group"
+                    >
+                      <Send className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                      Get Your Free Quote Now
+                    </button>
+                    <button
+                      onClick={() => {
+                        // Check if device is mobile
+                        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+                        if (isMobile) {
+                          window.location.href = "tel:+85621773737";
+                        }
+                        // Do nothing on desktop
+                      }}
+                      className="bg-white/20 hover:bg-white/30 text-[#3d3935] px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center justify-center group border-2 border-white/30 hover:border-white/50"
+                    >
+                      <Phone className="w-5 h-5 mr-2 group-hover:animate-pulse" />
+                      Call: +856 21 773 737
+                    </button>
+                  </div>
+
+                  {/* Trust indicators */}
+                  <div className="mt-8 pt-6 border-t border-white/20">
+                    <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[#3d3935]/80">
+                      <div className="flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        <span>Licensed & Insured</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        <span>Free Consultation</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        <span>Quality Guarantee</span>
+                      </div>
+                      <div className="flex items-center">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        <span>Competitive Pricing</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            <div className="grid lg:grid-cols-3 gap-8 mb-16">
+            
+              
+            </div>
+
+            {/* Quote Process Steps */}
+            <AnimatedSection animation="fade-up" delay={400}>
+              <div className="bg-white/60 rounded-2xl p-8 shadow-gold border-2 border-[#bfa76a]/30 luxury-card-glass backdrop-blur-xl">
+                <h3 className="text-3xl font-bold text-center text-gray-900 mb-8">
+                  Our Quote <span className="text-yellow-400">Process</span>
+                </h3>
+                <div className="grid md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="bg-[#bfa76a] text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                      1
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Submit Request</h4>
+                    <p className="text-sm text-gray-600">Fill out our quote form with your project details and requirements</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-[#3d9392] text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                      2
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Site Assessment</h4>
+                    <p className="text-sm text-gray-600">Our experts visit your site to evaluate the scope and requirements</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-orange-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                      3
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Detailed Proposal</h4>
+                    <p className="text-sm text-gray-600">Receive a comprehensive quote with timeline and material breakdown</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-green-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
+                      4
+                    </div>
+                    <h4 className="font-semibold text-gray-900 mb-2">Project Start</h4>
+                    <p className="text-sm text-gray-600">Approve the quote and begin your construction project with confidence</p>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
+
+            
+          </div>
+        </section>
         {/* Map Section */}
         <section className="py-20 bg-gray-50">
           <div className="container mx-auto px-4">
@@ -670,7 +860,7 @@ const ContactPage = () => {
                 Find <span className="text-[#3d9392]">Us</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Visit our offices across Laos for consultations and project discussions
+                Visit our office for consultations and project discussions
               </p>
             </AnimatedSection>
 
@@ -735,70 +925,6 @@ const ContactPage = () => {
                     </a>
                   </div>
                 </div>
-              </div>
-            </AnimatedSection>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <AnimatedSection className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                What Our <span className="text-[#3d9392]">Clients Say</span>
-              </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Hear from satisfied clients about their experience working with us
-              </p>
-            </AnimatedSection>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <AnimatedSection
-                  key={index}
-                  animation="fade-up"
-                  delay={index * 150}
-                  className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
-                >
-                  <div className="flex items-center mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-4 italic">"{testimonial.message}"</p>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{testimonial.name}</h4>
-                    <p className="text-sm text-gray-500">{testimonial.company}</p>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Emergency Contact */}
-        <section className="py-20 bg-gradient-to-r from-orange-600 to-blue-600 text-white">
-          <div className="container mx-auto px-4">
-            <AnimatedSection className="text-center">
-              <h2 className="text-4xl font-bold mb-6">Emergency Support</h2>
-              <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                Need immediate assistance? Our emergency support team is available 24/7
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="tel:+85621773737"
-                  className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
-                >
-                  <Phone className="w-5 h-5 mr-2" />
-                  Emergency Hotline: +856 21 773 737
-                </a>
-                <a
-                  href="mailto:info@slklaos.la"
-                  className="border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center"
-                >
-                  <Mail className="w-5 h-5 mr-2" />
-                  info@slklaos.la
-                </a>
               </div>
             </AnimatedSection>
           </div>
@@ -948,7 +1074,6 @@ const ContactPage = () => {
         onClose={() => setIsQuoteModalOpen(false)}
         source="footer_contact_now"
       />
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
     </>
   );
 };

@@ -19,7 +19,9 @@ import {
   AlertCircle,
   Wrench,
   Dribbble,
-  ChevronDown, 
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight, 
 } from "lucide-react";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -234,6 +236,10 @@ const ProductManagement: React.FC = () => {
   const [sortAsc, setSortAsc] = useState(false);
   const [filterCategory, setFilterCategory] = useState<string>('all');
 
+  /* pagination */
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+
   /* ui state */
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<null | { type: "success" | "error"; msg: string }>(null);
@@ -383,6 +389,19 @@ const ProductManagement: React.FC = () => {
     const commercial = subOptions.find((s) => s.name.toLowerCase() === "commercial");
     return form.category_id === flooring?.id && form.subcategory_id === commercial?.id;
   }, [form.category_id, form.subcategory_id, subOptions, categories]);
+
+  /* pagination calculations */
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  const currentProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    return products.slice(startIndex, endIndex);
+  }, [products, currentPage, productsPerPage]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategory, sortBy, sortAsc]);
 
   /* clear dependent values when parent changes */
   useEffect(() => {
@@ -689,7 +708,12 @@ const ProductManagement: React.FC = () => {
         <div className="mt-4 pt-4 border-t border-gray-100">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div className="text-sm text-gray-600">
-              <span className="font-semibold text-gray-900">{products.length}</span> products found
+              <span className="font-semibold text-gray-900">
+                {products.length > 0 
+                  ? `Showing ${((currentPage - 1) * productsPerPage) + 1}-${Math.min(currentPage * productsPerPage, products.length)} of ${products.length}`
+                  : '0'
+                }
+              </span> products
               {searchTerm && (
                 <span> for "<span className="font-medium text-gray-900">{searchTerm}</span>"</span>
               )}
@@ -718,7 +742,7 @@ const ProductManagement: React.FC = () => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {products.length > 0 ? (
-          products.map((p) => (
+          currentProducts.map((p) => (
             <div key={p.id} className="relative rounded-xl bg-white shadow-lg border border-gray-200 p-4 flex flex-col justify-between min-h-[320px]">
               {/* Featured badge */}
               {p.is_featured && (
@@ -848,6 +872,83 @@ const ProductManagement: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {products.length > 0 && totalPages > 1 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Page Info */}
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">
+                Showing {((currentPage - 1) * productsPerPage) + 1}-{Math.min(currentPage * productsPerPage, products.length)} of {products.length} products
+              </span>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === 1
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  const isCurrentPage = page === currentPage;
+                  const isNearCurrentPage = Math.abs(page - currentPage) <= 2;
+                  const isFirstOrLast = page === 1 || page === totalPages;
+                  
+                  if (totalPages <= 7 || isNearCurrentPage || isFirstOrLast) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                          isCurrentPage
+                            ? 'bg-green-600 text-white shadow-md'
+                            : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (page === currentPage - 3 || page === currentPage + 3) {
+                    return (
+                      <span key={page} className="px-2 py-2 text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === totalPages
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Preview Modal */}
       {previewProduct && (

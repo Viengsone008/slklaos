@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import { Plus, Edit, Trash2, Eye, Search, Filter, Clock, Calendar, CheckCircle, Share2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, Search, Filter, Clock, Calendar, CheckCircle, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSettings } from '../../../../contexts/SettingsContext';
 import { useSocialShare } from '../../../../contexts/SocialShareContext';
 import { Post } from '../../../../types/Post';
@@ -109,10 +109,11 @@ const PostList: React.FC<PostListProps> = ({ onCreatePost, onEditPost }) => {
     return matchesSearch && matchesStatus && matchesCategory;
   });
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredPosts.length / settings.postsPerPage);
-  const startIndex = (currentPage - 1) * settings.postsPerPage;
-  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + settings.postsPerPage);
+  // Pagination calculations - Fixed to 15 posts per page
+  const postsPerPage = 15;
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const startIndex = (currentPage - 1) * postsPerPage;
+  const paginatedPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
 
   // Reset to first page when filters change
   useEffect(() => {
@@ -347,7 +348,7 @@ const PostList: React.FC<PostListProps> = ({ onCreatePost, onEditPost }) => {
           </div>
 
           <div className="flex items-center text-sm text-gray-600">
-            <span>Showing {settings.postsPerPage} per page</span>
+            <span>Showing 15 per page</span>
           </div>
         </div>
       </div>
@@ -452,26 +453,78 @@ const PostList: React.FC<PostListProps> = ({ onCreatePost, onEditPost }) => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
-            <div className="text-sm text-gray-600">
-              Showing {startIndex + 1} to {Math.min(startIndex + settings.postsPerPage, filteredPosts.length)} of {filteredPosts.length} posts
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 hover:bg-gray-50 transition-colors"
-              >
-                Previous
-              </button>
-              <span className="text-sm text-gray-600">Page {currentPage} of {totalPages}</span>
-              <button
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 hover:bg-gray-50 transition-colors"
-              >
-                Next
-              </button>
+          <div className="px-6 py-4 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              {/* Page Info */}
+              <div className="text-sm text-gray-600">
+                <span className="font-semibold text-gray-900">
+                  Showing {startIndex + 1}-{Math.min(startIndex + postsPerPage, filteredPosts.length)} of {filteredPosts.length}
+                </span> posts
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                    currentPage === 1
+                      ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    const isCurrentPage = page === currentPage;
+                    const isNearCurrentPage = Math.abs(page - currentPage) <= 2;
+                    const isFirstOrLast = page === 1 || page === totalPages;
+                    
+                    if (totalPages <= 7 || isNearCurrentPage || isFirstOrLast) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                            isCurrentPage
+                              ? 'text-white shadow-md'
+                              : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+                          }`}
+                          style={isCurrentPage ? { backgroundColor: settings.primaryColor } : {}}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (page === currentPage - 3 || page === currentPage + 3) {
+                      return (
+                        <span key={page} className="px-2 py-2 text-gray-400">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                    currentPage === totalPages
+                      ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                  }`}
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         )}

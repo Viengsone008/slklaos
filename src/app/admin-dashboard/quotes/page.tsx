@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   DollarSign, Plus, Search, Filter, Mail, Phone, Building2, User, FileText, CheckCircle, XCircle,  
-  Edit, Trash2, Save, X, Calendar, Clock, Star, ArrowUpRight, ArrowDownRight, UserPlus, MessageSquare, MapPin, Eye, Download
+  Edit, Trash2, Save, X, Calendar, Clock, Star, ArrowUpRight, ArrowDownRight, UserPlus, MessageSquare, MapPin, Eye, Download,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { useDatabase } from '../../../contexts/DatabaseContext';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -79,7 +80,7 @@ interface FormData {
 }
 
 const QuoteManagement: React.FC = () => {
-  const { getAllRecords, createRecord, updateRecord, deleteRecord } = useDatabase();
+  const { getAllRecords, createRecord, updateRecord, deleteRecord, clearCache } = useDatabase();
   const { user } = useAuth();
   
   const [isClient, setIsClient] = useState(false);
@@ -98,6 +99,12 @@ const QuoteManagement: React.FC = () => {
   const [quoteToDelete, setQuoteToDelete] = useState<Quote | null>(null);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  /* pagination */
+  const [currentPage, setCurrentPage] = useState(1);
+  const quotesPerPage = 15;
 
   useEffect(() => { setIsClient(true); }, []);
 
@@ -134,28 +141,94 @@ const QuoteManagement: React.FC = () => {
   ];
 
   // Always fetch fresh data
-  const loadData = async () => {
+  const loadData = async (forceRefresh = false) => {
     if (!isClient) return;
     setIsLoading(true);
     try {
+      console.log('📊 Loading data...', forceRefresh ? '(force refresh)' : '');
+      
+      // If forcing refresh, clear cache first
+      if (forceRefresh) {
+        clearCache();
+      }
+      
       const [quotesData, usersData] = await Promise.all([
         getAllRecords('quotes'),
         getAllRecords('users')
       ]);
-      setQuotes(Array.isArray(quotesData) ? quotesData : []);
-      setUsers(Array.isArray(usersData) ? usersData : []);
-      console.log('Quotes state updated:', quotesData);
+      
+      const processedQuotes = Array.isArray(quotesData) ? quotesData : [];
+      const processedUsers = Array.isArray(usersData) ? usersData : [];
+      
+      console.log('📊 Raw data received:', {
+        quotes: processedQuotes.length,
+        users: processedUsers.length,
+        quotesIds: processedQuotes.map(q => q.id).slice(0, 5) // Show first 5 IDs
+      });
+      
+      setQuotes(processedQuotes);
+      setUsers(processedUsers);
+      setRefreshKey(prev => prev + 1); // Force re-render
+      
+      console.log('✅ State updated:', {
+        quotesCount: processedQuotes.length,
+        usersCount: processedUsers.length,
+        refreshKey: refreshKey + 1
+      });
     } catch (error) {
+      console.error('❌ Error loading data:', error);
       setError('Failed to load quotes. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Force refresh function
+  const forceRefresh = async () => {
+    console.log('🔄 Force refreshing all data...');
+    
+    // Clear all caches first
+    clearCache(); // Clear all cached data
+    clearCache('quotes'); // Clear quotes specifically
+    clearCache('users'); // Clear users specifically
+    
+    // Force re-render
+    setRefreshKey(prev => prev + 1);
+    
+    // Load fresh data
+    await loadData(true);
+    
+    console.log('✅ Force refresh completed');
+  };
+
   useEffect(() => {
     if (isClient) loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isClient]);
+
+  // Watch for changes in quotes array and log them
+  useEffect(() => {
+    console.log('📊 Quotes array updated:', {
+      count: quotes.length,
+      refreshKey,
+      quotesIds: quotes.map(q => q.id).slice(0, 10)
+    });
+  }, [quotes, refreshKey]);
+
+  // Test function to simulate delete without database call
+  const testDelete = (quoteId: string) => {
+    console.log('🧪 Testing delete for quote:', quoteId);
+    setQuotes(prevQuotes => {
+      const filtered = prevQuotes.filter(q => q.id !== quoteId);
+      console.log('🧪 Test delete result:', {
+        before: prevQuotes.length,
+        after: filtered.length,
+        removedId: quoteId
+      });
+      return filtered;
+    });
+    setRefreshKey(prev => prev + 1);
+  };
 
   const handleDeleteClick = (quote: Quote) => {
     setQuoteToDelete(quote);
@@ -164,17 +237,80 @@ const QuoteManagement: React.FC = () => {
 
   const confirmDelete = async () => {
     if (!quoteToDelete) return;
+    
+    const quoteIdToDelete = quoteToDelete.id;
+    const quoteNameToDelete = quoteToDelete.name;
+    
     try {
+      setIsDeleting(true);
       setIsLoading(true);
-      await deleteRecord(quoteToDelete.id, 'quotes');
-      setSuccess('Quote deleted successfully');
-      await loadData();
+      setError('');
+      
+      console.log('🗑️ Starting delete operation for quote:', quoteIdToDelete, quoteNameToDelete);
+      
+      // Step 1: Close modal immediately for better UX
       setDeleteConfirmModalOpen(false);
       setQuoteToDelete(null);
+      
+      // Step 2: Optimistically update the UI immediately
+      console.log('� Optimistically updating UI...');
+      setQuotes(prevQuotes => {
+        const filteredQuotes = prevQuotes.filter(q => q.id !== quoteIdToDelete);
+        console.log(`✅ Optimistic update: ${prevQuotes.length} → ${filteredQuotes.length} quotes`);
+        return filteredQuotes;
+      });
+      
+      // Force immediate re-render
+      setRefreshKey(prev => prev + 1);
+      
+      // Step 3: Delete from database
+      console.log('🗑️ Deleting from database...');
+      await deleteRecord(quoteIdToDelete, 'quotes');
+      console.log('✅ Database deletion successful');
+      
+      // Step 4: Clear all caches to ensure fresh data
+      console.log('🧹 Clearing all caches...');
+      clearCache('quotes');
+      clearCache('users');
+      clearCache(); // Clear all caches
+      
+      // Step 5: Force complete data refresh
+      console.log('🔄 Forcing complete data refresh...');
+      setTimeout(async () => {
+        try {
+          await forceRefresh();
+          console.log('✅ Complete refresh successful');
+        } catch (refreshError) {
+          console.error('❌ Error during complete refresh:', refreshError);
+          // If refresh fails, try to reload data manually
+          await loadData(true);
+        }
+      }, 100);
+      
+      // Step 6: Show success message
+      setSuccess(`Quote "${quoteNameToDelete}" deleted successfully`);
+      
+      // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
+      
     } catch (error) {
-      setError('Failed to delete quote. Please try again.');
+      console.error('❌ Delete operation failed:', error);
+      setError(`Failed to delete quote "${quoteNameToDelete}". Please try again.`);
+      
+      // If delete failed, revert optimistic update and refresh everything
+      try {
+        console.log('🔄 Reverting optimistic update and refreshing...');
+        clearCache();
+        await forceRefresh();
+      } catch (refreshError) {
+        console.error('❌ Error during error recovery:', refreshError);
+        // Force page reload as last resort
+        window.location.reload();
+      }
+      
+      setTimeout(() => setError(''), 5000);
     } finally {
+      setIsDeleting(false);
       setIsLoading(false);
     }
   };
@@ -306,7 +442,7 @@ const QuoteManagement: React.FC = () => {
       await loadData();
       setTimeout(() => setSuccess(''), 3000);
     } catch (error) {
-      console.error('Failed to update quote:', error, JSON.stringify(error), error?.message, error?.stack);
+      console.error('Failed to update quote:', error);
       setError('Failed to update quote. Please try again.');
     } finally {
       setIsLoading(false);
@@ -373,6 +509,25 @@ const QuoteManagement: React.FC = () => {
     
     return matchesSearch && matchesStatus && matchesProjectType && matchesAssignee;
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredQuotes.length / quotesPerPage);
+  const currentQuotes = filteredQuotes.slice(
+    (currentPage - 1) * quotesPerPage,
+    currentPage * quotesPerPage
+  );
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, projectTypeFilter, assigneeFilter]);
+
+  // Reset to page 1 if current page is empty after deletion
+  React.useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -487,7 +642,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.name}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder:text-gray-700"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -503,7 +658,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.email}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -518,7 +673,7 @@ const QuoteManagement: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -533,7 +688,7 @@ const QuoteManagement: React.FC = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter company name"
                   />
                 </div>
@@ -553,7 +708,7 @@ const QuoteManagement: React.FC = () => {
                     name="project_type"
                     value={formData.project_type}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="">Select project type</option>
                     {projectTypes.map(type => (
@@ -573,7 +728,7 @@ const QuoteManagement: React.FC = () => {
                     name="budget_range"
                     value={formData.budget_range}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="">Select budget range</option>
                     <option value="under-10000">Under $10,000</option>
@@ -595,7 +750,7 @@ const QuoteManagement: React.FC = () => {
                     name="timeline"
                     value={formData.timeline}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="">Select timeline</option>
                     <option value="asap">ASAP</option>
@@ -617,7 +772,7 @@ const QuoteManagement: React.FC = () => {
                     name="location"
                     value={formData.location}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter project location"
                   />
                 </div>
@@ -632,7 +787,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.description}
                     onChange={handleFormChange}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter project description"
                   ></textarea>
                 </div>
@@ -652,7 +807,7 @@ const QuoteManagement: React.FC = () => {
                     name="preferred_contact"
                     value={formData.preferred_contact}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
@@ -669,7 +824,7 @@ const QuoteManagement: React.FC = () => {
                     name="source"
                     value={formData.source}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="website">Website</option>
                     <option value="phone">Phone Call</option>
@@ -696,7 +851,7 @@ const QuoteManagement: React.FC = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="new">New</option>
                     <option value="reviewing">Reviewing</option>
@@ -715,7 +870,7 @@ const QuoteManagement: React.FC = () => {
                     name="priority"
                     value={formData.priority}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -732,7 +887,7 @@ const QuoteManagement: React.FC = () => {
                     name="assigned_to"
                     value={formData.assigned_to}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                   >
                     <option value="">Unassigned</option>
                     {Array.isArray(users) && users.map(user => (
@@ -776,7 +931,7 @@ const QuoteManagement: React.FC = () => {
                       value={formData.estimated_value}
                       onChange={handleFormChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                       placeholder="Enter estimated value"
                     />
                   </div>
@@ -795,7 +950,7 @@ const QuoteManagement: React.FC = () => {
                       value={formData.quoted_amount}
                       onChange={handleFormChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                       placeholder="Enter quoted amount"
                     />
                   </div>
@@ -813,7 +968,7 @@ const QuoteManagement: React.FC = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter win probability"
                   />
                 </div>
@@ -830,7 +985,7 @@ const QuoteManagement: React.FC = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
                     placeholder="Enter lead score"
                   />
                 </div>
@@ -1241,7 +1396,14 @@ const QuoteManagement: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2">
-       
+          
+          <button
+            onClick={forceRefresh}
+            className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 flex items-center gap-2"
+            disabled={isLoading}
+          >
+            <Search size={18} /> {isLoading ? 'Refreshing...' : 'Refresh'}
+          </button>
           <button
             onClick={handleCreateClick}
             className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-2"
@@ -1280,7 +1442,7 @@ const QuoteManagement: React.FC = () => {
               placeholder="Search quotes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
             />
           </div>
 
@@ -1289,7 +1451,7 @@ const QuoteManagement: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
             >
               <option value="all">All Statuses</option>
               <option value="new">New</option>
@@ -1305,12 +1467,12 @@ const QuoteManagement: React.FC = () => {
             <select
               value={projectTypeFilter}
               onChange={(e) => setProjectTypeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
             >
               <option value="all">All Project Types</option>
               {uniqueProjectTypes.map(type => (
                 <option key={type} value={type}>
-                  {type?.charAt(0).toUpperCase() + type?.slice(1)}
+                  {type ? type.charAt(0).toUpperCase() + type.slice(1) : ''}
                 </option>
               ))}
             </select>
@@ -1321,7 +1483,7 @@ const QuoteManagement: React.FC = () => {
             <select
               value={assigneeFilter}
               onChange={(e) => setAssigneeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
             >
               <option value="all">All Assignees</option>
               <option value="">Unassigned</option>
@@ -1362,7 +1524,18 @@ const QuoteManagement: React.FC = () => {
       )}
 
       {/* Quotes Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200" key={`quotes-section-${refreshKey}`}>
+        {/* Results Summary */}
+        {filteredQuotes.length > 0 && (
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">
+                Showing {((currentPage - 1) * quotesPerPage) + 1}-{Math.min(currentPage * quotesPerPage, filteredQuotes.length)} of {filteredQuotes.length}
+              </span> quotes
+            </div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -1384,8 +1557,8 @@ const QuoteManagement: React.FC = () => {
             </button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto" key={`table-container-${refreshKey}`}>
+            <table className="w-full" key={`quotes-table-${quotes.length}-${refreshKey}`}>
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
                   <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
@@ -1398,7 +1571,7 @@ const QuoteManagement: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredQuotes.map((quote) => (
+                {currentQuotes.map((quote) => (
                   <tr key={quote.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-start">
@@ -1447,18 +1620,22 @@ const QuoteManagement: React.FC = () => {
                         <button
                           onClick={() => handleViewQuote(quote)}
                           className="text-blue-600 hover:text-blue-900"
+                          title="View Quote"
                         >
                           <Eye className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleEditClick(quote)}
                           className="text-blue-600 hover:text-blue-900"
+                          title="Edit Quote"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
+                        
                         <button
                           onClick={() => handleDeleteClick(quote)}
                           className="text-red-600 hover:text-red-900"
+                          title="Delete Quote"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -1472,6 +1649,83 @@ const QuoteManagement: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {filteredQuotes.length > 0 && totalPages > 1 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Page Info */}
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">
+                Showing {((currentPage - 1) * quotesPerPage) + 1}-{Math.min(currentPage * quotesPerPage, filteredQuotes.length)} of {filteredQuotes.length} quotes
+              </span>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === 1
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  const isCurrentPage = page === currentPage;
+                  const isNearCurrentPage = Math.abs(page - currentPage) <= 2;
+                  const isFirstOrLast = page === 1 || page === totalPages;
+                  
+                  if (totalPages <= 7 || isNearCurrentPage || isFirstOrLast) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                          isCurrentPage
+                            ? 'bg-green-600 text-white shadow-md'
+                            : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (page === currentPage - 3 || page === currentPage + 3) {
+                    return (
+                      <span key={page} className="px-2 py-2 text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === totalPages
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
     </div>
   );

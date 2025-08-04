@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { UserPlus, Edit, Trash2, Eye, EyeOff, User, Mail, Lock, Save, X, CheckCircle, AlertCircle, Shield, ChevronDown } from 'lucide-react';
+import { UserPlus, Edit, Trash2, Eye, EyeOff, User, Mail, Lock, Save, X, CheckCircle, AlertCircle, Shield, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { supabase } from "../../../lib/supabase";
 
 interface RegisteredUser {
@@ -32,6 +32,10 @@ const UserManagement = () => {
   const [success, setSuccess] = useState('');
   const [isClient, setIsClient] = useState(false);
   const [newEmail, setNewEmail] = useState('');
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 15;
 
   // Predefined options for dropdowns
   const departmentOptions = [
@@ -97,6 +101,11 @@ const UserManagement = () => {
   useEffect(() => {
     if (isClient) loadUsers();
   }, [isClient]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(users.length / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const currentUsers = users.slice(startIndex, startIndex + usersPerPage);
 
   const validateForm = () => {
     if (!formData.name.trim()) {
@@ -552,8 +561,17 @@ const UserManagement = () => {
       {/* Users List */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">All Users ({users.length})</h2>
-          <p className="text-sm text-gray-600 mt-1">All users from Supabase</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">All Users ({users.length})</h2>
+              <p className="text-sm text-gray-600 mt-1">All users from Supabase</p>
+            </div>
+            {users.length > usersPerPage && (
+              <p className="text-sm text-gray-600">
+                Showing {startIndex + 1} to {Math.min(startIndex + usersPerPage, users.length)} of {users.length} users • 15 per page
+              </p>
+            )}
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -569,7 +587,7 @@ const UserManagement = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {users.map((user) => (
+              {currentUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 font-medium text-gray-900">{user.name}</td>
                   <td className="px-6 py-4 text-gray-600">{user.email}</td>
@@ -612,6 +630,113 @@ const UserManagement = () => {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination Controls */}
+        {users.length > usersPerPage && (
+          <div className="px-6 py-4 border-t border-gray-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center text-sm text-gray-700">
+                <span>
+                  Showing {startIndex + 1} to {Math.min(startIndex + usersPerPage, users.length)} of {users.length} users
+                </span>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="hidden sm:flex items-center space-x-1">
+                  {/* First page */}
+                  {totalPages > 1 && (
+                    <button
+                      onClick={() => setCurrentPage(1)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        currentPage === 1
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      1
+                    </button>
+                  )}
+
+                  {/* Ellipsis if needed */}
+                  {currentPage > 3 && totalPages > 5 && (
+                    <span className="px-2 py-2 text-gray-500">...</span>
+                  )}
+
+                  {/* Pages around current */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page => {
+                      if (totalPages <= 5) return page > 1 && page < totalPages;
+                      if (currentPage <= 3) return page > 1 && page <= 4 && page < totalPages;
+                      if (currentPage >= totalPages - 2) return page >= totalPages - 3 && page > 1 && page < totalPages;
+                      return page >= currentPage - 1 && page <= currentPage + 1;
+                    })
+                    .map(page => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                          currentPage === page
+                            ? 'bg-orange-600 text-white'
+                            : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+
+                  {/* Ellipsis if needed */}
+                  {currentPage < totalPages - 2 && totalPages > 5 && (
+                    <span className="px-2 py-2 text-gray-500">...</span>
+                  )}
+
+                  {/* Last page */}
+                  {totalPages > 1 && (
+                    <button
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        currentPage === totalPages
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      {totalPages}
+                    </button>
+                  )}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={`flex items-center px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                    currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {users.length === 0 && (
           <div className="text-center py-12">
             <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />

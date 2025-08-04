@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Phone, Plus, Search, Filter, Mail, Building2, User, MessageSquare, CheckCircle, XCircle,  
-  Edit, Trash2, Save, X, Calendar, Clock, Star, ArrowUpRight, ArrowDownRight, UserPlus, DollarSign, Eye
+  Edit, Trash2, Save, X, Calendar, Clock, Star, ArrowUpRight, ArrowDownRight, UserPlus, DollarSign, Eye,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 import { useDatabase } from '../../../contexts/DatabaseContext';
@@ -31,6 +32,10 @@ const ContactManagement = () => {
   const [sourceFilter, setSourceFilter] = useState('all');
   const [assigneeFilter, setAssigneeFilter] = useState('all');
   const [isClient, setIsClient] = useState(false);
+
+  /* pagination */
+  const [currentPage, setCurrentPage] = useState(1);
+  const contactsPerPage = 15;
    
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingContact, setEditingContact] = useState<any | null>(null);
@@ -292,6 +297,18 @@ const ContactManagement = () => {
       contact.assigned_user?.id === assigneeFilter;
     return matchesSearch && matchesStatus && matchesSource && matchesAssignee;
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredContacts.length / contactsPerPage);
+  const currentContacts = filteredContacts.slice(
+    (currentPage - 1) * contactsPerPage,
+    currentPage * contactsPerPage
+  );
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, sourceFilter, assigneeFilter]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -1083,6 +1100,17 @@ const ContactManagement = () => {
 
       {/* Contacts Table */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        {/* Results Summary */}
+        {filteredContacts.length > 0 && (
+          <div className="px-6 py-4 border-b border-gray-200">
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">
+                Showing {((currentPage - 1) * contactsPerPage) + 1}-{Math.min(currentPage * contactsPerPage, filteredContacts.length)} of {filteredContacts.length}
+              </span> contacts
+            </div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
@@ -1118,7 +1146,7 @@ const ContactManagement = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {filteredContacts.map((contact) => (
+                {currentContacts.map((contact) => (
                   <tr key={contact.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-start">
@@ -1191,6 +1219,83 @@ const ContactManagement = () => {
           </div>
         )}
       </div>
+
+      {/* Pagination Controls */}
+      {filteredContacts.length > 0 && totalPages > 1 && (
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            {/* Page Info */}
+            <div className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">
+                Showing {((currentPage - 1) * contactsPerPage) + 1}-{Math.min(currentPage * contactsPerPage, filteredContacts.length)} of {filteredContacts.length} contacts
+              </span>
+            </div>
+
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-2">
+              {/* Previous Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === 1
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  const isCurrentPage = page === currentPage;
+                  const isNearCurrentPage = Math.abs(page - currentPage) <= 2;
+                  const isFirstOrLast = page === 1 || page === totalPages;
+                  
+                  if (totalPages <= 7 || isNearCurrentPage || isFirstOrLast) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 rounded-lg font-medium transition-all duration-200 ${
+                          isCurrentPage
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-700 hover:bg-gray-50 border border-gray-200'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (page === currentPage - 3 || page === currentPage + 3) {
+                    return (
+                      <span key={page} className="px-2 py-2 text-gray-400">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg border font-medium transition-all duration-200 ${
+                  currentPage === totalPages
+                    ? 'border-gray-200 text-gray-400 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400'
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {deleteConfirmModalOpen && (

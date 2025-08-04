@@ -197,6 +197,68 @@ const ContactForm = () => {
           </div>
         </AnimatedSection>
       )}
+
+      {/* Success Popup Modal */}
+      {success && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+          <AnimatedSection animation="scale">
+            <div className="bg-white/95 backdrop-blur-lg rounded-3xl shadow-2xl max-w-md w-full p-8 border border-green-200/50 text-center">
+              {/* Success Icon */}
+              <div className="bg-green-100 p-6 rounded-full inline-flex mb-6 shadow-lg">
+                <CheckCircle className="w-12 h-12 text-green-600" />
+              </div>
+              
+              {/* Success Message */}
+              <h3 className="text-3xl font-bold text-[#1a2936] mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Message Sent Successfully!
+              </h3>
+              
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                Thank you for contacting us! Our team will review your request and get back to you within 24 hours.
+              </p>
+              
+              {/* Next Steps */}
+              <div className="bg-gradient-to-r from-[#bfa76a]/10 to-[#e5e2d6]/20 rounded-2xl p-6 mb-6 border border-[#bfa76a]/20">
+                <h4 className="font-bold text-[#bfa76a] mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                  What happens next?
+                </h4>
+                <div className="space-y-2 text-sm text-gray-600">
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                    <span>We'll review your project requirements</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                    <span>Our expert will contact you within 24 hours</span>
+                  </div>
+                  <div className="flex items-center">
+                    <CheckCircle className="w-4 h-4 text-green-600 mr-2 flex-shrink-0" />
+                    <span>Schedule your free consultation</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Auto-close countdown */}
+              <div className="text-sm text-gray-500 mb-6">
+                This window will close automatically in <span className="font-bold text-[#bfa76a]">{countdown}</span> seconds
+              </div>
+              
+              {/* Close Button */}
+              <button
+                onClick={() => {
+                  setSuccess(false);
+                  setCountdown(15);
+                  setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+                }}
+                className="bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] hover:from-[#e5e2d6] hover:to-[#bfa76a] px-8 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg"
+                style={{ fontFamily: 'Playfair Display, serif' }}
+              >
+                Close
+              </button>
+            </div>
+          </AnimatedSection>
+        </div>
+      )}
     </form>
   );
 };

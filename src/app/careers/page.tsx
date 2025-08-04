@@ -42,8 +42,9 @@ const slugify = (text: string) => {
 };
 
 const CareersPage = () => {
-  // Scroll progress indicator and floating quote button visibility
+  // Scroll progress indicator, floating quote button visibility, and 3D effects
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const [showNav, setShowNav] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   useEffect(() => {
@@ -52,9 +53,10 @@ const CareersPage = () => {
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
+      setScrollY(scrollTop);
       setShowNav(window.scrollY > 0);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const router = useRouter();
@@ -226,20 +228,82 @@ const CareersPage = () => {
       </div>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
+        <style jsx global>{`
+          .perspective-1000 {
+            perspective: 1000px;
+          }
+          .preserve-3d {
+            transform-style: preserve-3d;
+          }
+          .luxury-card-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(191, 167, 106, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(191, 167, 106, 0.37);
+          }
+          .shadow-gold {
+            box-shadow: 0 25px 50px -12px rgba(191, 167, 106, 0.25), 0 0 0 1px rgba(191, 167, 106, 0.05);
+          }
+          .luxury-gradient-text {
+            background: linear-gradient(135deg, #faedcbff 0%, #f8f4e3ff 50%, #f9ebc8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .luxury-gold-text {
+            color: #b3a698ff;
+            text-shadow: 0 0 20px rgba(234, 204, 129, 0.5);
+          }
+          .luxury-fade-text {
+            background: linear-gradient(135deg, #f7dec6ff 0%, #f5d79bff 50%, #f7dcbeff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .drop-shadow-gold {
+            filter: drop-shadow(0 4px 6px rgba(191, 167, 106, 0.3)) drop-shadow(0 1px 3px rgba(191, 167, 106, 0.2));
+          }
+        `}</style>
         {/* HERO SECTION - Luxury Upgrade */}
-        <section className="relative py-36 md:py-44 bg-gradient-to-br from-[#3d9392] via-[#6dbeb0] to-[#1b3d5a] text-white overflow-hidden luxury-card-glass shadow-gold">
-          <div className="absolute inset-0">
+        <section className="relative py-36 md:py-44 bg-gradient-to-br from-[#3d9392] via-[#6dbeb0] to-[#1b3d5a] text-white overflow-hidden luxury-card-glass shadow-gold perspective-1000">
+          <div 
+            className="absolute inset-0 preserve-3d"
+            style={{
+              transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0002}) rotateX(${scrollY * 0.02}deg)`,
+              willChange: 'transform'
+            }}
+          >
             <img 
               src="https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Career-Banner.jpg" 
               alt="Careers at SLK Trading"
               className="w-full h-full object-cover opacity-80 scale-105 blur-[2px]"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#3d9392]/80 via-[#bfa76a]/30 to-[#1b3d5a]/80"></div>
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"></div>
           </div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-[#3d9392]/80 via-[#bfa76a]/30 to-[#1b3d5a]/80 preserve-3d"
+            style={{
+              transform: `translateZ(10px) translateY(${scrollY * 0.3}px)`,
+              willChange: 'transform'
+            }}
+          ></div>
+          <div 
+            className="absolute inset-0 bg-white/10 backdrop-blur-[2px] preserve-3d"
+            style={{
+              transform: `translateZ(20px) translateY(${scrollY * 0.2}px)`,
+              willChange: 'transform'
+            }}
+          ></div>
           
           <div className="relative z-10 container mx-auto px-4">
-            <AnimatedSection className="text-center max-w-4xl mx-auto luxury-card-glass bg-white/30 backdrop-blur-xl border border-[#bfa76a]/30 rounded-3xl shadow-gold px-8 py-12">
+            <div 
+              className="preserve-3d"
+              style={{
+                transform: `translateZ(30px) translateY(${scrollY * 0.1}px)`,
+                willChange: 'transform'
+              }}
+            >
+              <AnimatedSection className="text-center max-w-4xl mx-auto luxury-card-glass bg-white/30 backdrop-blur-xl border border-[#bfa76a]/30 rounded-3xl shadow-gold px-8 py-12">
               <h1 className="text-5xl lg:text-7xl font-extrabold mb-6 luxury-gradient-text drop-shadow-[0_6px_32px_rgba(191,167,106,0.45)]">
                 Join Our <span className="luxury-gold-text luxury-fade-text drop-shadow-gold">Team</span>
               </h1>
@@ -262,6 +326,7 @@ const CareersPage = () => {
                 </button>
               </div>
             </AnimatedSection>
+            </div>
           </div>
         </section>
 
@@ -623,28 +688,151 @@ const CareersPage = () => {
           </div>
         </section>
 
-        {/* CTA SECTION */}
-        <section className="py-20 bg-gradient-to-r from-[#6dbeb0] to-[#3d9392] text-white">
-          <div className="container mx-auto px-4">
-            <AnimatedSection className="text-center">
-              <h2 className="text-4xl font-bold mb-6">Ready to Start Your Career?</h2>
-              <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-                Join our growing team and be part of Laos' construction industry transformation
+        {/* ENHANCED CTA SECTION - Ready to Start Your Career */}
+        <section className="py-32 bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#3d9392] text-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-40 -mt-40 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -ml-32 -mb-32 animate-pulse delay-1000"></div>
+          <div className="absolute top-1/3 left-1/5 w-40 h-40 bg-white/5 rounded-full animate-bounce"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-white/8 rounded-full animate-pulse delay-500"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <AnimatedSection className="text-center max-w-5xl mx-auto">
+              {/* Career Icon */}
+              <div className="mb-10">
+                <div className="bg-white/20 backdrop-blur-sm p-8 rounded-full inline-flex mb-8 border border-white/30 shadow-2xl">
+                  <Briefcase className="w-16 h-16 text-white" />
+                </div>
+              </div>
+
+              {/* Main Heading */}
+              <h2 className="text-6xl lg:text-7xl font-extrabold mb-8 text-[#1a2936]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Ready to Start Your <span className="text-white drop-shadow-lg">Career?</span>
+              </h2>
+              
+              {/* Decorative line */}
+              <div className="flex justify-center mb-10">
+                <div className="h-1 w-40 bg-gradient-to-r from-white via-[#1a2936] to-white rounded-full opacity-80"></div>
+              </div>
+
+              {/* Enhanced Description */}
+              <p className="text-2xl lg:text-3xl text-[#1a2936] mb-16 max-w-4xl mx-auto leading-relaxed font-medium">
+                Join our growing team and be part of 
+                <span className="font-bold text-white"> Laos' construction industry transformation</span>. 
+                Build your future with 
+                <span className="font-bold text-white"> industry leaders</span> and 
+                <span className="font-bold text-white"> innovative projects</span>
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {/* Updated button to link to career-catalogue */}
-                <button 
+
+              {/* Career Benefits Grid */}
+              <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <TrendingUp className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Career Growth
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Advance your career with clear progression paths and leadership development opportunities.
+                  </p>
+                </div>
+
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <Award className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Recognition & Rewards
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Be recognized for your contributions with competitive salaries and performance bonuses.
+                  </p>
+                </div>
+
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Team Culture
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Work with passionate professionals in a collaborative and supportive environment.
+                  </p>
+                </div>
+              </div>
+
+              {/* Enhanced CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+                <button
                   onClick={handleApplyNow}
-                  className="bg-white text-[#1b3d5a] hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                  className="bg-white text-[#1a2936] hover:bg-gray-100 px-12 py-6 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center group border-2 border-white/20"
+                  style={{ fontFamily: 'Playfair Display, serif' }}
                 >
+                  <Briefcase className="w-7 h-7 mr-3 group-hover:scale-110 transition-transform duration-300" />
                   View Open Positions
                 </button>
-                <button 
+                <button
                   onClick={() => router.push('/contact')}
-                  className="border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300"
+                  className="border-2 border-white/50 hover:bg-white/10 text-white px-12 py-6 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm flex items-center justify-center group"
+                  style={{ fontFamily: 'Playfair Display, serif' }}
                 >
+                  <Users className="w-7 h-7 mr-3 group-hover:scale-110 transition-transform duration-300" />
                   Contact HR Team
                 </button>
+              </div>
+
+              {/* Career Stats & Social Proof */}
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-8 border border-white/30 max-w-4xl mx-auto">
+                <div className="grid md:grid-cols-4 gap-6 text-center">
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      50+
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Team Members</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      95%
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Employee Satisfaction</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      10+
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Years Experience</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      200+
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Projects Completed</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="border-t border-white/30 pt-8 mt-8">
+                <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Equal Opportunity Employer</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Professional Development</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Competitive Benefits</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Work-Life Balance</span>
+                  </div>
+                </div>
               </div>
             </AnimatedSection>
           </div>

@@ -652,23 +652,43 @@ const ModalHeader: React.FC<ModalHeaderProps> = ({ title, subtitle, onClose }) =
 
 /* -------- Success components ------- */
 const SuccessHeader: React.FC<{ countdown: number }> = ({ countdown }) => (
-  <div className="bg-gradient-to-r from-[#6dbeb0] to-[#3d9392] text-white p-8 rounded-t-3xl relative overflow-hidden">
-    <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20" />
-    <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16" />
-    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-3 flex items-center space-x-2">
+  <div className="bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#3d9392] text-white p-8 rounded-t-3xl relative overflow-hidden">
+    {/* Floating decorative elements */}
+    <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20 animate-pulse" />
+    <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16 animate-pulse delay-1000" />
+    <div className="absolute top-1/3 left-1/5 w-16 h-16 bg-white/5 rounded-full animate-bounce" />
+    
+    {/* Countdown timer */}
+    <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-lg rounded-full p-3 flex items-center space-x-2 border border-white/30 shadow-lg">
       <Clock className="w-5 h-5" />
       <span className="font-bold text-lg">{countdown}</span>
     </div>
+    
     <div className="relative z-10 text-center">
-      <div className="bg-white/20 p-4 rounded-full inline-flex mb-4">
-        <CheckCircle className="w-16 h-16 text-white" />
+      {/* Success icon with animation */}
+      <div className="bg-white/20 backdrop-blur-sm p-6 rounded-full inline-flex mb-6 shadow-2xl border border-white/30">
+        <CheckCircle className="w-16 h-16 text-white animate-pulse" />
       </div>
-      <h2 className="text-4xl font-bold mb-2">Quote Request Submitted!</h2>
-      <div className="flex items-center justify-center space-x-2">
-        <Sparkles className="w-6 h-6" />
-        <p className="text-[#e5f1f1] text-xl">Your project inquiry has been received</p>
-        <Sparkles className="w-6 h-6" />
+      
+      {/* Main heading */}
+      <h2 className="text-5xl font-extrabold mb-4 text-[#1a2936]" style={{ fontFamily: 'Playfair Display, serif' }}>
+        Quote Request <span className="text-white drop-shadow-lg">Submitted!</span>
+      </h2>
+      
+      {/* Decorative line */}
+      <div className="flex items-center justify-center space-x-4 mb-4">
+        <Sparkles className="w-6 h-6 text-white animate-pulse" />
+        <div className="h-1 w-32 bg-gradient-to-r from-white via-[#1a2936] to-white rounded-full opacity-80"></div>
+        <Sparkles className="w-6 h-6 text-white animate-pulse delay-500" />
       </div>
+      
+      {/* Subtitle */}
+      <p className="text-[#1a2936] text-xl font-medium mb-2">
+        Your project inquiry has been received and prioritized
+      </p>
+      <p className="text-white/90 text-lg">
+        Our expert team will review your requirements and respond within 24 hours
+      </p>
     </div>
   </div>
 );
@@ -679,54 +699,72 @@ const SuccessBody: React.FC<{
   getAssignedSalesperson: (projectType: string, budget: string) => string;
 }> = ({ formData, calculateLeadScore, getAssignedSalesperson }) => (
   <div className="p-8">
+    {/* Information cards with glass morphism */}
     <div className="grid md:grid-cols-3 gap-6 mb-8">
-      <Card iconBg="bg-[#6dbeb0]/20" icon={<User className="w-8 h-8 text-[#6dbeb0]" />} title="Request Details">
-        <span>🆔 ID: #{Date.now().toString().slice(-6)}</span>
-        <span>👤 Name: {formData.name}</span>
-        <span>📧 Email: {formData.email}</span>
+      <Card 
+        iconBg="bg-gradient-to-br from-[#bfa76a]/30 to-[#e5e2d6]/20" 
+        icon={<User className="w-8 h-8 text-[#bfa76a]" />} 
+        title="Request Details"
+      >
+        <span className="flex items-center"><span className="mr-2">🆔</span> ID: #{Date.now().toString().slice(-6)}</span>
+        <span className="flex items-center"><span className="mr-2">👤</span> Name: {formData.name}</span>
+        <span className="flex items-center"><span className="mr-2">📧</span> Email: {formData.email}</span>
       </Card>
-      <Card iconBg="bg-[#1b3d5a]/10" icon={<Building2 className="w-8 h-8 text-[#1b3d5a]" />} title="Project Info">
-        {formData.project_type && <span>🏗️ Type: {formData.project_type}</span>}
-        {formData.budget_range && <span>💰 Budget: {formData.budget_range.replace(/-/g, " - ")}</span>}
-        <span>📊 Lead Score: {calculateLeadScore(formData)}/100</span>
+      <Card 
+        iconBg="bg-gradient-to-br from-[#1a2936]/20 to-[#bfa76a]/10" 
+        icon={<Building2 className="w-8 h-8 text-[#1a2936]" />} 
+        title="Project Info"
+      >
+        {formData.project_type && <span className="flex items-center"><span className="mr-2">🏗️</span> Type: {formData.project_type}</span>}
+        {formData.budget_range && <span className="flex items-center"><span className="mr-2">💰</span> Budget: {formData.budget_range.replace(/-/g, " - ")}</span>}
+        <span className="flex items-center"><span className="mr-2">📊</span> Lead Score: {calculateLeadScore(formData)}/100</span>
       </Card>
-      <Card iconBg="bg-[#3d9392]/20" icon={<Clock className="w-8 h-8 text-[#3d9392]" />} title="Response">
-        <span>⏰ Within: 24 hours</span>
-        <span>👤 Assigned: {getAssignedSalesperson(formData.project_type, formData.budget_range)}</span>
-        <span>📞 Method: {formData.preferred_contact}</span>
+      <Card 
+        iconBg="bg-gradient-to-br from-[#3d9392]/30 to-[#bfa76a]/20" 
+        icon={<Clock className="w-8 h-8 text-[#3d9392]" />} 
+        title="Response Timeline"
+      >
+        <span className="flex items-center"><span className="mr-2">⏰</span> Within: 24 hours</span>
+        <span className="flex items-center"><span className="mr-2">👤</span> Assigned: {getAssignedSalesperson(formData.project_type, formData.budget_range)}</span>
+        <span className="flex items-center"><span className="mr-2">📞</span> Method: {formData.preferred_contact}</span>
       </Card>
     </div>
     
-    {/* What happens next */}
-    <div className="bg-[#e5f1f1] p-8 rounded-3xl border-2 border-[#6dbeb0]/30 mb-6">
-      <div className="flex items-center text-[#1b3d5a] mb-4">
-        <Calendar className="w-8 h-8 mr-3" />
-        <span className="text-2xl font-bold">What Happens Next?</span>
+    {/* What happens next - Enhanced styling */}
+    <div className="bg-gradient-to-br from-[#bfa76a]/10 via-[#e5e2d6]/20 to-[#f8fafc]/30 backdrop-blur-sm p-8 rounded-3xl border border-[#bfa76a]/30 mb-6 shadow-lg">
+      <div className="flex items-center text-[#1a2936] mb-6">
+        <div className="bg-gradient-to-br from-[#bfa76a] to-[#e5e2d6] p-3 rounded-full mr-4 shadow-lg">
+          <Calendar className="w-8 h-8 text-white" />
+        </div>
+        <span className="text-3xl font-bold" style={{ fontFamily: 'Playfair Display, serif' }}>What Happens Next?</span>
       </div>
-      <div className="grid md:grid-cols-2 gap-6 text-[#1b3d5a]">
+      <div className="grid md:grid-cols-2 gap-6 text-[#1a2936]">
         {[
           "Our team reviews your project requirements",
           "We prepare a detailed, customized quote",
           "You receive a comprehensive proposal",
           "We schedule a consultation meeting"
         ].map((txt, i) => (
-          <div key={txt} className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-[#6dbeb0] text-white rounded-full flex items-center justify-center text-sm font-bold">
+          <div key={txt} className="flex items-center space-x-4 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-[#bfa76a]/20 hover:bg-white/70 transition-all duration-300">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#bfa76a] to-[#e5e2d6] text-white rounded-full flex items-center justify-center text-lg font-bold shadow-lg">
               {i + 1}
             </div>
-            <span className="font-medium">{txt}</span>
+            <span className="font-medium" style={{ fontFamily: 'Playfair Display, serif' }}>{txt}</span>
           </div>
         ))}
       </div>
     </div>
     
-    {/* Confirmation banner */}
-    <div className="bg-[#e5f1f1] p-4 rounded-2xl text-center">
-      <div className="flex items-center justify-center text-[#1b3d5a] mb-2">
-        <Award className="w-6 h-6 mr-2" />
-        <span className="font-bold text-lg">Success Confirmation</span>
+    {/* Premium confirmation banner */}
+    <div className="bg-gradient-to-r from-green-50 to-emerald-50 backdrop-blur-sm p-6 rounded-2xl border border-green-200/50 text-center shadow-lg">
+      <div className="flex items-center justify-center text-green-800 mb-3">
+        <div className="bg-green-100 p-2 rounded-full mr-3">
+          <Award className="w-6 h-6 text-green-600" />
+        </div>
+        <span className="font-bold text-xl" style={{ fontFamily: 'Playfair Display, serif' }}>Success Confirmation</span>
       </div>
-      <p className="text-[#1b3d5a] mb-4">✅ Your quote request has been saved & our sales team notified.</p>
+      <p className="text-green-700 font-medium text-lg mb-2">✅ Your quote request has been successfully submitted!</p>
+      <p className="text-green-600">Our sales team has been notified and will prioritize your inquiry.</p>
     </div>
   </div>
 );
@@ -736,16 +774,23 @@ const SuccessFooter: React.FC<{ onClose: () => void }> = ({ onClose }) => (
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <button
         onClick={onClose}
-        className="bg-[#6dbeb0] hover:bg-[#3d9392] text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors"
+        className="bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] hover:from-[#e5e2d6] hover:to-[#bfa76a] px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+        style={{ fontFamily: 'Playfair Display, serif' }}
       >
         Continue Browsing
       </button>
       <a
         href="tel:+85620555155551"
-        className="border-2 border-[#6dbeb0] text-[#6dbeb0] hover:bg-[#e5f1f1] px-8 py-4 rounded-xl font-bold text-lg transition-colors"
+        className="border-2 border-[#bfa76a] text-[#bfa76a] hover:bg-[#bfa76a]/10 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 backdrop-blur-sm"
+        style={{ fontFamily: 'Playfair Display, serif' }}
       >
         Call Us Now
       </a>
+    </div>
+    
+    {/* Auto-close message */}
+    <div className="mt-6 text-sm text-gray-500">
+      This window will close automatically in <span className="font-bold text-[#bfa76a]">15</span> seconds
     </div>
   </div>
 );
@@ -758,10 +803,10 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ iconBg, icon, title, children }) => (
-  <div className="bg-[#e5f1f1] p-6 rounded-2xl text-center space-y-1">
-    <div className={`${iconBg} p-3 rounded-full inline-flex mb-3`}>{icon}</div>
-    <h4 className="font-bold text-[#1b3d5a] mb-2">{title}</h4>
-    <div className="text-sm text-[#1b3d5a] space-y-1">{children}</div>
+  <div className="bg-white/80 backdrop-blur-lg border border-[#bfa76a]/20 p-6 rounded-2xl text-center space-y-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-white/90">
+    <div className={`${iconBg} p-3 rounded-full inline-flex mb-3 shadow-lg`}>{icon}</div>
+    <h4 className="font-bold text-[#1a2936] mb-3 text-lg" style={{ fontFamily: 'Playfair Display, serif' }}>{title}</h4>
+    <div className="text-sm text-[#1a2936] space-y-2 font-medium">{children}</div>
   </div>
 );
 

@@ -10,13 +10,11 @@ interface FloatingQuoteButtonProps {
 const FloatingQuoteButton: React.FC<FloatingQuoteButtonProps> = ({ onClick, className }) => (
   <button
     onClick={onClick}
-    className={
-      `fixed bottom-24 right-8 z-[9999] bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] px-6 py-4 rounded-full shadow-2xl font-bold text-lg flex items-center gap-2 border-2 border-[#bfa76a] hover:scale-105 transition-all duration-300 ${className || ''}`
-    }
+    className={`fixed bottom-20 md:bottom-24 right-8 z-[9999] bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] px-3 py-2 md:px-6 md:py-4 rounded-full shadow-2xl font-bold text-sm md:text-lg flex items-center gap-2 border-2 border-[#bfa76a] hover:scale-105 transition-all duration-300 ${className || ''}`}
     style={{ boxShadow: "0 4px 24px 0 rgba(191,167,106,0.18)" }}
   >
-    Get a Quote
-    <ArrowRight className="w-5 h-5" />
+    <span className="text-xs md:text-lg">Get a Quote</span>
+    <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
   </button>
 );
 

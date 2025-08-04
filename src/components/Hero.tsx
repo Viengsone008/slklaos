@@ -8,6 +8,7 @@ import Trans from '../components/Trans';
 const Hero = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
   const [stats, setStats] = useState({
     experience: 0,
     projects: 0,
@@ -57,31 +58,84 @@ const Hero = () => {
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
+  // Add scroll listener for 3D parallax effect
+  useEffect(() => {
+    let ticking = false;
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
-      <section id="home" className="relative min-h-screen text-white overflow-hidden">
+      <section id="home" className="relative min-h-screen text-white overflow-hidden hero-3d-container">
         {/* Background */}
-        <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 hero-3d-layer"
+          style={{
+            transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0002})`,
+            transformStyle: 'preserve-3d',
+            perspective: '1000px'
+          }}
+        >
           <img 
             src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1920" 
             alt="Modern house construction and design background"
             className={`w-full h-full object-cover object-center ${isDesktop ? 'bg-zoom-animate' : ''}`}
             style={{
-              transform: !isDesktop ? 'scale(1.05)' : undefined
+              transform: !isDesktop 
+                ? `scale(1.05) rotateX(${scrollY * 0.01}deg) rotateY(${scrollY * 0.005}deg)` 
+                : `rotateX(${scrollY * 0.01}deg) rotateY(${scrollY * 0.005}deg)`,
+              transformStyle: 'preserve-3d',
+              filter: `brightness(${1 - scrollY * 0.0005}) contrast(${1 + scrollY * 0.0003})`
             }}
           />
           {/* Enhanced overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/40"></div>
+          <div 
+            className="absolute inset-0 bg-black/40"
+            style={{
+              transform: `translateZ(10px) translateY(${scrollY * 0.2}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          ></div>
           {/* Gradient overlay for depth */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/10 to-black/30"></div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/10 to-black/30"
+            style={{
+              transform: `translateZ(20px) translateY(${scrollY * 0.3}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          ></div>
           {/* Subtle animated overlay - only on desktop */}
-          <div className={`absolute inset-0 bg-gradient-to-br from-[#1b3d5a]/20 via-transparent to-[#3d9392]/20 ${
-            window.innerWidth > 768 ? 'animate-background-pulse' : ''
-          }`}></div>
+          <div 
+            className={`absolute inset-0 bg-gradient-to-br from-[#1b3d5a]/20 via-transparent to-[#3d9392]/20 ${
+              window.innerWidth > 768 ? 'animate-background-pulse' : ''
+            }`}
+            style={{
+              transform: `translateZ(30px) translateY(${scrollY * 0.1}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          ></div>
         </div>
 
         {/* Simplified Floating Particles - Reduced for Mobile */}
-        <div className="particles-container">
+        <div 
+          className="particles-container hero-3d-layer"
+          style={{
+            transform: `translateZ(40px) translateY(${scrollY * 0.15}px)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           {[...Array(window.innerWidth > 768 ? 15 : 8)].map((_, i) => (
             <div
               key={i}
@@ -105,7 +159,13 @@ const Hero = () => {
         </div>
         
         {/* Main Content Container with Mobile-Safe Padding */}
-        <div className="relative z-10 container mx-auto px-4 pt-28 pb-16 sm:pt-24 lg:pt-8 lg:pb-16">
+        <div 
+          className="relative z-10 container mx-auto px-4 pt-28 pb-16 sm:pt-24 lg:pt-8 lg:pb-16 hero-3d-layer"
+          style={{
+            transform: `translateZ(50px) translateY(${scrollY * -0.1}px)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           <div className="flex flex-col items-start min-h-[calc(100vh-6rem)] lg:min-h-[65vh] relative animate-fade-in">
             {/* Main Content - All Left Aligned */}
             <div className="w-full flex flex-col justify-start z-10 max-w-4xl animate-slide-in">

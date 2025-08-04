@@ -9,7 +9,6 @@ import {
   Filter,
   Clock,
   Eye,
-  MessageCircle,
   Share2,
   Mail,
   CheckCircle,
@@ -69,14 +68,16 @@ const NewsPage = () => {
   ];
   // Scroll progress indicator
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
+      setScrollY(scrollTop);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const { t } = useLanguage();
@@ -92,6 +93,9 @@ const NewsPage = () => {
   const [subscribeSuccess, setSubscribeSuccess] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const postsPerPage = 6;
+
+  // Static subscriber count that doesn't change on re-renders
+  const [subscriberCount] = useState(() => Math.floor(Math.random() * 500) + 1200);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -110,7 +114,7 @@ const NewsPage = () => {
           ...post,
           featuredImage: post.featured_image,
           publishedAt: post.published_at,
-          viewCount: post.view_count ?? Math.floor(Math.random() * 1000) + 500,
+          viewCount: post.view_count ? post.view_count * 200 : Math.floor(Math.random() * 1000) + 500,
           tags: post.tags ?? [],
           readTime: Math.max(2, Math.round(post.content.split(' ').length / 200)) + ' min read'
         }));
@@ -249,6 +253,49 @@ const NewsPage = () => {
 
   return (
     <>
+      <style jsx>{`
+        /* 3D Parallax Effects */
+        .hero-3d-container {
+          perspective: 1000px;
+          transform-style: preserve-3d;
+          overflow: hidden;
+        }
+        
+        .hero-3d-layer {
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+        
+        /* Enhanced luxury effects */
+        .luxury-card-glass {
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .shadow-gold {
+          box-shadow: 0 10px 40px rgba(73, 71, 68, 0.3);
+        }
+        
+        .luxury-gradient-text {
+          background: linear-gradient(135deg, #f9f2e0ff, #f6f3e9ff, #eedfb8ff);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .luxury-gold-text {
+          color: #fbe2c9ff;
+          text-shadow: 0 2px 8px rgba(134, 129, 125, 0.9);
+        }
+        
+        .luxury-fade-text {
+          opacity: 90%;
+        }
+        
+        .drop-shadow-gold {
+          filter: drop-shadow(0 4px 16px rgba(243, 241, 235, 0.25));
+        }
+      `}</style>
       {/* Scroll Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 z-[9999]">
         <div
@@ -276,24 +323,52 @@ const NewsPage = () => {
           ref={heroRef}
           id="hero"
           className="relative py-36 md:py-44 bg-gradient-to-br from-[#3d9392] via-[#6dbeb0] to-[#1b3d5a] text-white overflow-hidden luxury-card-glass shadow-gold"
+          style={{ perspective: '1000px' }}
         >
-          <div className="absolute inset-0">
+          <div 
+            className="absolute inset-0"
+            style={{
+              transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0001}) rotateX(${scrollY * 0.008}deg)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
             <img
               src="https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//News_Hero.jpg"
               alt="Latest news and updates"
               className="w-full h-full object-cover opacity-80 scale-105 blur-[2px]"
+              style={{
+                filter: `brightness(${1 - scrollY * 0.0003}) contrast(${1 + scrollY * 0.0002})`
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#3d9392]/80 via-[#bfa76a]/30 to-[#1b3d5a]/80"></div>
-            <div className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"></div>
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-[#3d9392]/80 via-[#bfa76a]/30 to-[#1b3d5a]/80"
+              style={{
+                transform: `translateZ(10px) translateY(${scrollY * 0.3}px)`,
+                transformStyle: 'preserve-3d'
+              }}
+            ></div>
+            <div 
+              className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"
+              style={{
+                transform: `translateZ(20px) translateY(${scrollY * 0.2}px)`,
+                transformStyle: 'preserve-3d'
+              }}
+            ></div>
           </div>
 
-          <div className="relative z-10 container mx-auto px-4">
+          <div 
+            className="relative z-10 container mx-auto px-4"
+            style={{
+              transform: `translateZ(30px) translateY(${scrollY * -0.1}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
             <AnimatedSection className="text-center max-w-4xl mx-auto luxury-card-glass bg-white/30 backdrop-blur-xl border border-[#bfa76a]/30 rounded-3xl shadow-gold px-8 py-12">
               <h1 className="text-5xl lg:text-7xl font-extrabold mb-6 luxury-gradient-text drop-shadow-[0_6px_32px_rgba(191,167,106,0.45)]">
-                Latest <span className="luxury-gold-text luxury-fade-text drop-shadow-gold">News</span>
+                Latest <span className="text-5xl lg:text-7xl font-extrabold mb-6 luxury-gradient-text drop-shadow-[0_6px_32px_rgba(191,167,106,0.45)]">News</span>
               </h1>
               <p className="text-2xl md:text-3xl text-[#bfa76a] mb-8 leading-relaxed luxury-fade-text drop-shadow-gold font-medium">
-                Stay updated with our <span className="luxury-gold-text font-bold">latest projects</span>, <span className="luxury-gold-text font-bold">announcements</span>, and <span className="luxury-gold-text font-bold">industry insights</span>
+                Stay updated with our <span className="text-white font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">latest projects</span>, <span className="text-white font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">announcements</span>, and <span className="text-white font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">industry insights</span>
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
                 <button
@@ -440,11 +515,7 @@ const NewsPage = () => {
                               <div className="flex items-center space-x-4 text-sm text-gray-500">
                                 <div className="flex items-center">
                                   <Eye className="w-4 h-4 mr-1" />
-                                  {post.viewCount || Math.floor(Math.random() * 1000) + 500}
-                                </div>
-                                <div className="flex items-center">
-                                  <MessageCircle className="w-4 h-4 mr-1" />
-                                  {Math.floor(Math.random() * 20) + 5}
+                                  {post.viewCount || (post.view_count ? post.view_count * 100 : Math.floor(Math.random() * 1000) + 500)}
                                 </div>
                               </div>
                               <button 
@@ -575,7 +646,7 @@ const NewsPage = () => {
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <div className="flex items-center">
                             <Eye className="w-4 h-4 mr-1" />
-                            {post.viewCount || Math.floor(Math.random() * 1000) + 500}
+                            {post.viewCount || (post.view_count ? post.view_count * 100 : Math.floor(Math.random() * 1000) + 500)}
                           </div>
                         </div>
                         <button 
@@ -695,11 +766,7 @@ const NewsPage = () => {
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
                         <div className="flex items-center">
                           <Eye className="w-4 h-4 mr-1" />
-                          {post.viewCount || Math.floor(Math.random() * 1000) + 500}
-                        </div>
-                        <div className="flex items-center">
-                          <MessageCircle className="w-4 h-4 mr-1" />
-                          {Math.floor(Math.random() * 20) + 5}
+                          {post.viewCount || (post.view_count ? post.view_count * 100 : Math.floor(Math.random() * 1000) + 500)}
                         </div>
                       </div>
                       <button 
@@ -765,24 +832,137 @@ const NewsPage = () => {
           </div>
         </section>
 
-        {/* Newsletter Signup */}
-        <section ref={newsletterRef} id="newsletter" className="py-20 bg-gradient-to-r from-[#6dbeb0] to-[#3d9392] text-white">
-          <div className="container mx-auto px-4">
-            <AnimatedSection className="text-center max-w-2xl mx-auto">
-              <h2 className="text-4xl font-bold mb-6">Stay Updated</h2>
-              <p className="text-xl text-blue-100 mb-8">
-                Subscribe to our newsletter and never miss important updates
+        {/* Enhanced Newsletter Signup */}
+        <section ref={newsletterRef} id="newsletter" className="py-32 bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#3d9392] text-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full -mr-40 -mt-40 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full -ml-32 -mb-32 animate-pulse delay-1000"></div>
+          <div className="absolute top-1/3 left-1/5 w-40 h-40 bg-white/5 rounded-full animate-bounce"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-white/8 rounded-full animate-pulse delay-500"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <AnimatedSection className="text-center max-w-5xl mx-auto">
+              {/* Newsletter Icon */}
+              <div className="mb-10">
+                <div className="bg-white/20 backdrop-blur-sm p-8 rounded-full inline-flex mb-8 border border-white/30 shadow-2xl">
+                  <Mail className="w-16 h-16 text-white" />
+                </div>
+              </div>
+
+              {/* Main Heading */}
+              <h2 className="text-6xl lg:text-7xl font-extrabold mb-8 text-[#1a2936]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Stay <span className="text-white drop-shadow-lg">Updated</span>
+              </h2>
+              
+              {/* Decorative line */}
+              <div className="flex justify-center mb-10">
+                <div className="h-1 w-40 bg-gradient-to-r from-white via-[#1a2936] to-white rounded-full opacity-80"></div>
+              </div>
+
+              {/* Enhanced Description */}
+              <p className="text-2xl lg:text-3xl text-[#1a2936] mb-16 max-w-4xl mx-auto leading-relaxed font-medium">
+                Subscribe to our newsletter and be the first to know about 
+                <span className="font-bold text-white"> new projects</span>, 
+                <span className="font-bold text-white"> industry insights</span>, and 
+                <span className="font-bold text-white"> exclusive updates</span>
               </p>
-              <button
-                onClick={openSubscribeModal}
-                className="bg-white hover:bg-gray-100 text-[#1b3d5a] px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center mx-auto transform hover:scale-105"
-              > 
-                <Mail className="w-5 h-5 mr-2" />
-                Subscribe to Updates
-              </button>
-              <p className="text-sm text-blue-100 mt-4 opacity-80">
-                Join our community of {Math.floor(Math.random() * 500) + 500} subscribers
-              </p>
+
+              {/* Benefits Grid */}
+              <div className="grid md:grid-cols-3 gap-8 mb-16 max-w-4xl mx-auto">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <Calendar className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Weekly Updates
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Get the latest news about our construction projects and company milestones delivered weekly.
+                  </p>
+                </div>
+
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <CheckCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Exclusive Content
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Access behind-the-scenes content, project insights, and industry tips exclusive to subscribers.
+                  </p>
+                </div>
+
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/25 transition-all duration-300 group">
+                  <div className="bg-white/30 p-4 rounded-full inline-flex mb-6 group-hover:scale-110 transition-all duration-300">
+                    <User className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    Expert Insights
+                  </h3>
+                  <p className="text-[#1a2936] leading-relaxed">
+                    Learn from our construction experts with tips, trends, and best practices in the industry.
+                  </p>
+                </div>
+              </div>
+
+              {/* Enhanced CTA Button */}
+              <div className="mb-12">
+                <button
+                  onClick={openSubscribeModal}
+                  className="bg-white text-[#1a2936] hover:bg-gray-100 px-12 py-6 rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center mx-auto group border-2 border-white/20"
+                  style={{ fontFamily: 'Playfair Display, serif' }}
+                >
+                  <Mail className="w-7 h-7 mr-3 group-hover:scale-110 transition-transform duration-300" />
+                  Subscribe to Our Newsletter
+                </button>
+              </div>
+
+              {/* Social Proof & Stats */}
+              <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-8 border border-white/30 max-w-3xl mx-auto">
+                <div className="grid md:grid-cols-3 gap-6 text-center">
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      {subscriberCount}+
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Active Subscribers</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      98%
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Satisfaction Rate</div>
+                  </div>
+                  <div>
+                    <div className="text-4xl font-bold text-white mb-2" style={{ fontFamily: 'Playfair Display, serif' }}>
+                      Weekly
+                    </div>
+                    <div className="text-[#1a2936] font-medium">Fresh Content</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="border-t border-white/30 pt-8 mt-8">
+                <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">No Spam</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Unsubscribe Anytime</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Privacy Protected</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Weekly Updates</span>
+                  </div>
+                </div>
+              </div>
             </AnimatedSection>
           </div>
         </section>

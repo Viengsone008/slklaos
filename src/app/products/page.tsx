@@ -13,8 +13,15 @@ import WhatsAppChatButton from '../../components/WhatsAppChatButton';
 import FloatingQuoteButton from '../../components/FloatingQuoteButton';
 
 // Sparkle overlay SVG component
-const SparkleOverlay = () => (
-  <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" style={{mixBlendMode:'screen'}}>
+const SparkleOverlay = ({ scrollY = 0 }: { scrollY?: number }) => (
+  <svg 
+    className="absolute inset-0 w-full h-full pointer-events-none z-10" 
+    style={{
+      mixBlendMode:'screen',
+      transform: `translateZ(25px) translateY(${scrollY * 0.15}px) rotateZ(${scrollY * 0.01}deg)`,
+      transformStyle: 'preserve-3d'
+    }}
+  >
     <g>
       <circle cx="10%" cy="30%" r="2.5" fill="#fff8e1" opacity="0.7">
         <animate attributeName="r" values="2.5;5;2.5" dur="2.5s" repeatCount="indefinite" />
@@ -46,14 +53,16 @@ const AnimatedStat = ({ icon: Icon, value, label, delay }) => (
 const ProductsPage = () => {
   // Scroll progress indicator
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
+      setScrollY(scrollTop);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
@@ -313,6 +322,81 @@ const ProductsPage = () => {
       </div>
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet" />
+        <style>{`
+          /* 3D Parallax Effects */
+          .hero-3d-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            overflow: hidden;
+          }
+          
+          .hero-3d-layer {
+            transform-style: preserve-3d;
+            will-change: transform;
+          }
+          
+          .hero-shine {
+            position: relative;
+            overflow: hidden;
+          }
+          
+          .hero-shine-bar {
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-20deg);
+            pointer-events: none;
+            animation: heroShineMove 2.2s cubic-bezier(.4,0,.2,1) 0.5s 1;
+          }
+          
+          @keyframes heroShineMove {
+            0% { left: -75%; }
+            60% { left: 110%; }
+            100% { left: 110%; }
+          }
+          
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          .animate-fadeInUp {
+            animation: fadeInUp 0.7s ease-out forwards;
+          }
+          
+          .hero-btn-glow {
+            transition: box-shadow 0.3s ease;
+          }
+          
+          .hero-btn-glow:focus-visible {
+            box-shadow: 0 0 0 4px rgba(191, 167, 106, 0.3);
+          }
+          
+          .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(191,167,106,0.3);
+            transform: scale(0);
+            animation: ripple-expand 0.6s linear;
+            pointer-events: none;
+          }
+          
+          @keyframes ripple-expand {
+            to {
+              transform: scale(4);
+              opacity: 0;
+            }
+          }
+        `}</style>
       </Head>
       {/* Floating Section Navigation (dots) */}
       {showNav && (
@@ -331,22 +415,51 @@ const ProductsPage = () => {
       <div className="min-h-screen bg-gradient-to-br from-[#f8fafc] via-[#e0e7ef] to-[#f9e7d2]">
 
         {/* ─── Hero ─── */}
-        <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#f8fafc] text-[#1a2936] overflow-hidden">
+        <section ref={heroRef} id="hero" className="relative min-h-screen flex items-center bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#f8fafc] text-[#1a2936] overflow-hidden" style={{ perspective: '1000px' }}>
           {/* Hero Background Image */}
-          <div className="absolute inset-0 z-0">
+          <div 
+            className="absolute inset-0 z-0"
+            style={{
+              transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0001}) rotateX(${scrollY * 0.008}deg)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
             <img
               src="https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Product_waterproofing.png"
               alt="Premium construction materials background"
               className="w-full h-full object-cover opacity-30 scale-105 transition-all duration-700"
-              style={{ zIndex: 1 }}
+              style={{ 
+                zIndex: 1,
+                filter: `brightness(${1 - scrollY * 0.0003}) contrast(${1 + scrollY * 0.0002})`
+              }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#bfa76a]/80 to-[#e5e2d6]/80" style={{ zIndex: 2 }} />
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-[#bfa76a]/80 to-[#e5e2d6]/80" 
+              style={{ 
+                zIndex: 2,
+                transform: `translateZ(10px) translateY(${scrollY * 0.3}px)`,
+                transformStyle: 'preserve-3d'
+              }} 
+            />
             {/* Sparkle overlay */}
-            <SparkleOverlay />
+            <div
+              style={{
+                transform: `translateZ(20px) translateY(${scrollY * 0.2}px)`,
+                transformStyle: 'preserve-3d'
+              }}
+            >
+              <SparkleOverlay scrollY={scrollY} />
+            </div>
           </div>
 
-          <div className="relative z-10 container mx-auto px-4 flex flex-col justify-center items-center h-full">
-            <AnimatedSection className="text-center max-w-4xl mx-auto">
+          <div 
+            className="relative z-10 container mx-auto px-4 flex flex-col justify-center items-center h-full"
+            style={{
+              transform: `translateZ(30px) translateY(${scrollY * -0.1}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            <AnimatedSection className="text-center max-w-4xl mx-auto mt-24 sm:mt-0 flex flex-col justify-center items-center">
               {/* Hero headline with shine animation */}
               <h1 className="text-6xl lg:text-7xl font-extrabold mb-6 drop-shadow-2xl relative hero-shine" style={{ fontFamily: 'Playfair Display, serif', overflow: 'hidden' }}>
                 <span className="inline-block animate-fadeInUp">Premium <span className="text-[#bfa76a]">Products</span></span>
@@ -652,26 +765,105 @@ const ProductsPage = () => {
         </section>
         
         {/* ─── CTA ─── */}
-        <section ref={ctaRef} id="cta" className="py-20 bg-gradient-to-r from-[#3d9392] to-[#6dbeb0] text-white">
-          <div className="container mx-auto px-4">
+        <section ref={ctaRef} id="cta" className="py-24 bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#3d9392] text-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24 animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-white/5 rounded-full animate-bounce"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
             <AnimatedSection className="text-center">
-              <h2 className="text-4xl font-bold mb-6">
-                Need Help Choosing Products?
+              {/* Icon */}
+              <div className="mb-8">
+                <div className="bg-white/20 p-6 rounded-full inline-flex mb-6 backdrop-blur-sm border border-white/30">
+                  <Package className="w-12 h-12 text-white" />
+                </div>
+              </div>
+
+              {/* Main Heading */}
+              <h2 className="text-5xl lg:text-6xl font-extrabold mb-6 text-[#1a2936]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Need Help Choosing <span className="text-white drop-shadow-lg">Products?</span>
               </h2>
-              <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                Our experts are here to help you select the perfect materials for your project
+              
+              {/* Decorative line */}
+              <div className="flex justify-center mb-8">
+                <div className="h-1 w-32 bg-gradient-to-r from-white via-[#1a2936] to-white rounded-full opacity-80"></div>
+              </div>
+
+              {/* Subtitle */}
+              <p className="text-xl lg:text-2xl text-[#1a2936] mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
+                Our <span className="font-bold text-white">construction experts</span> are here to help you select the 
+                <span className="font-bold text-white"> perfect materials</span> for your project's success
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+              {/* Expert Services Grid */}
+              <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-5xl mx-auto">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <Award className="w-10 h-10 text-white mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Expert Consultation</h3>
+                  <p className="text-sm text-[#1a2936]">Professional guidance for optimal material selection</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <Truck className="w-10 h-10 text-white mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Fast Delivery</h3>
+                  <p className="text-sm text-[#1a2936]">Quick shipping across Laos with quality assurance</p>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <CheckCircle className="w-10 h-10 text-white mx-auto mb-4" />
+                  <h3 className="text-lg font-bold text-white mb-2">Quality Guarantee</h3>
+                  <p className="text-sm text-[#1a2936]">Premium materials with comprehensive warranty</p>
+                </div>
+              </div>
+
+              {/* Contact Options */}
+              <div className="mb-12">
+                <h3 className="text-2xl font-bold text-[#1a2936] mb-6">How Can We Help You?</h3>
+                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <Search className="w-8 h-8 text-white mx-auto mb-4" />
+                    <h4 className="font-bold text-white mb-2">Product Selection</h4>
+                    <p className="text-sm text-[#1a2936] mb-4">Get personalized recommendations based on your project requirements</p>
+                    <button
+                      onClick={() => setIsQuoteModalOpen(true)}
+                      className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm"
+                    >
+                      Get Recommendations
+                    </button>
+                  </div>
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <Phone className="w-8 h-8 text-white mx-auto mb-4" />
+                    <h4 className="font-bold text-white mb-2">Instant Support</h4>
+                    <p className="text-sm text-[#1a2936] mb-4">Speak directly with our construction material specialists</p>
+                    <button
+                      type="button"
+                      className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300 text-sm"
+                      onClick={() => {
+                        if (typeof window !== "undefined") {
+                          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                          if (isMobile) {
+                            window.location.href = "tel:+85621773737";
+                          }
+                        }
+                      }}
+                    >
+                      Call Now
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
                 <button
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="bg-white text-[#1b3d5a] hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                  className="bg-white text-[#1a2936] hover:bg-gray-100 px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center group"
                 >
+                  <ArrowRight className="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform duration-300" />
                   Get Product Quote
                 </button>
-                {/* Button opens phone dialer on mobile, does nothing on desktop */}
                 <button
                   type="button"
-                  className="border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center"
+                  className="border-2 border-white hover:bg-white/20 text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 backdrop-blur-sm flex items-center justify-center group"
                   onClick={() => {
                     if (typeof window !== "undefined") {
                       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -681,9 +873,55 @@ const ProductsPage = () => {
                     }
                   }}
                 >
-                  <Phone className="w-5 h-5 mr-2" />
-                  Call Expert: +856&nbsp;21&nbsp;773&nbsp;737
+                  <Phone className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300" />
+                  Call Expert: +856 21 773 737
                 </button>
+              </div>
+
+              {/* Statistics */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 max-w-3xl mx-auto">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-1">500+</div>
+                  <div className="text-xs text-[#1a2936] font-medium">Projects Supplied</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-1">24h</div>
+                  <div className="text-xs text-[#1a2936] font-medium">Response Time</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-1">99%</div>
+                  <div className="text-xs text-[#1a2936] font-medium">Satisfaction Rate</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-white mb-1">15+</div>
+                  <div className="text-xs text-[#1a2936] font-medium">Years Experience</div>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="border-t border-white/30 pt-8">
+                <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Premium Quality Materials</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Expert Technical Support</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Competitive Pricing</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Fast Nationwide Delivery</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Comprehensive Warranty</span>
+                  </div>
+                </div>
               </div>
             </AnimatedSection>
           </div>

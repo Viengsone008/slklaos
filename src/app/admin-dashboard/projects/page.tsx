@@ -23,6 +23,8 @@ Building2,
   Bell,
   Image as ImageIcon,
   Eye,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -81,7 +83,8 @@ interface Project {
   gallery?: string[];
   testimonial?: string;
   brochure_url?: string;
-  created_at?: string; // for ordering only
+  created_at?: string;
+  is_published?: boolean;
 }
 
 type ProjectForm = Partial<Project> & {
@@ -188,31 +191,43 @@ const SummaryCardButton: React.FC<{
 );
 
 const TopBar: React.FC = () => (
- <header
-    className="h-14 flex items-center justify-between px-6 text-white"
-    style={{ background: "linear-gradient(to right, #3d9392, #1b3d5a)" }}
-  >
-    <div className="flex items-center gap-2 font-semibold">
-      <Building2 className="w-5 h-5" /> Project Management Dashboard
-    </div>
-    <nav className="hidden md:flex items-center gap-6 text-sm">
-      <button className="flex items-center gap-1 hover:opacity-75">
-        <MapPin className="w-4 h-4" /> Map View
-      </button>
-      <button className="flex items-center gap-1 hover:opacity-75">
-        <FileText className="w-4 h-4" /> Site Logs
-      </button>
-      <button className="flex items-center gap-1 hover:opacity-75">
-        <AlertCircle className="w-4 h-4" /> Site Issues
-      </button>
-      <button className="flex items-center gap-1 hover:opacity-75">
-        <Users className="w-4 h-4" /> Visitor Logs
-      </button>
-    </nav>
-    <div className="flex items-center gap-4">
-      <Bell className="w-5 h-5" />
-      <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-        <Users className="w-4 h-4" />
+  <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white shadow-lg">
+    <div className="px-6 py-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <Building2 className="w-6 h-6" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold">Project Management</h1>
+            <p className="text-blue-100 text-sm">Manage and track all construction projects</p>
+          </div>
+        </div>
+        
+        <nav className="hidden md:flex items-center gap-4">
+          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-sm">
+            <MapPin className="w-4 h-4" /> 
+            <span>Map View</span>
+          </button>
+          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-sm">
+            <FileText className="w-4 h-4" /> 
+            <span>Reports</span>
+          </button>
+          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors text-sm">
+            <AlertCircle className="w-4 h-4" /> 
+            <span>Issues</span>
+          </button>
+        </nav>
+        
+        <div className="flex items-center gap-3">
+          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors relative">
+            <Bell className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+          </button>
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+            <Users className="w-4 h-4" />
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -265,81 +280,130 @@ interface ProjectCardProps {
 
   
 const ProjectCard: React.FC<ProjectCardProps> = ({ project, onEdit, onDelete, onPreview, isAdmin }) => (
+  <motion.div 
+    layout
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    whileHover={{ y: -5 }}
+    className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 group relative overflow-hidden border border-slate-100"
+  >
+    {/* Status & Published Badges */}
+    <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+      <StatusPill status={project.status} />
+      <PriorityPill priority={project.priority} />
+      {project.is_published && (
+        <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg">
+          ✓ Published
+        </span>
+      )}
+    </div>
 
-  <div className="bg-white rounded-lg shadow group relative overflow-hidden">
-    {/* Image */}
-    {project.image && (
-      <div className="h-40 w-full overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-      </div>
-    )}
-
-    {/* Actions */}
-    <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-      <button onClick={() => onEdit(project)} className="text-blue-600 hover:text-blue-800">
+    {/* Action Buttons */}
+    <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+      <button 
+        onClick={() => onPreview(project)} 
+        className="p-2 bg-white/90 hover:bg-white text-slate-600 hover:text-slate-800 rounded-lg shadow-sm transition-all"
+        title="Preview Project"
+      >
+        <Eye className="w-4 h-4" />
+      </button>
+      <button 
+        onClick={() => onEdit(project)} 
+        className="p-2 bg-white/90 hover:bg-white text-blue-600 hover:text-blue-800 rounded-lg shadow-sm transition-all"
+        title="Edit Project"
+      >
         <Edit className="w-4 h-4" />
       </button>
       {isAdmin && (
-        <button onClick={() => onDelete(project)} className="text-red-600 hover:text-red-800">
+        <button 
+          onClick={() => onDelete(project)} 
+          className="p-2 bg-white/90 hover:bg-white text-red-600 hover:text-red-800 rounded-lg shadow-sm transition-all"
+          title="Delete Project"
+        >
           <Trash2 className="w-4 h-4" />
         </button>
-      )} 
-    </div> 
+      )}
+    </div>
 
-  
-<div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-  <button onClick={() => onPreview(project)} className="text-gray-600 hover:text-gray-800" title="Preview">
-    <Eye className="w-4 h-4" />
-  </button>
-  <button onClick={() => onEdit(project)} className="text-blue-600 hover:text-blue-800">
-    <Edit className="w-4 h-4" />
-  </button>
-  {isAdmin && (
-    <button onClick={() => onDelete(project)} className="text-red-600 hover:text-red-800">
-      <Trash2 className="w-4 h-4" />
-    </button>
-  )}
-</div>
+    {/* Project Image */}
+    {project.image && (
+      <div className="h-48 w-full overflow-hidden rounded-t-xl">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+      </div>
+    )}
 
- 
-    <div className="p-4">
-      <div className="flex gap-2 mb-2">
-        <StatusPill status={project.status} />
-        <PriorityPill priority={project.priority} />
+    {/* Project Content */}
+    <div className="p-5">
+      <div className="mb-3">
+        <h3 className="text-lg font-bold text-slate-900 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+          {project.description || "No description provided"}
+        </p>
       </div>
 
-  {project.is_published && (
-    <span className="absolute top-2 left-2 bg-green-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-      Published to Website
-    </span>
-  )}
-
-        {!project.is_published && (
-    <span className="absolute top-2 left-2 bg-gray-500 text-white text-xs font-semibold px-2 py-1 rounded-full shadow">
-      Unpublished to Website
-    </span>
-  )}
-
-      
-      <h3 className="text-lg font-semibold text-gray-800 mb-1 line-clamp-1">{project.title}</h3>
-      <p className="text-sm text-gray-600 line-clamp-2 mb-3">{project.description}</p>
-      <div className="space-y-1 text-sm text-gray-600">
-        <div className="flex items-center gap-1">
-          <MapPin className="w-4 h-4" /> {project.location}
+      {/* Project Details */}
+      <div className="space-y-2 mb-4">
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <MapPin className="w-4 h-4 text-slate-400" />
+          <span>{project.location}</span>
         </div>
-        <div className="flex items-center gap-1">
-          <Calendar className="w-4 h-4" /> {project.year} • {project.duration}
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <Calendar className="w-4 h-4 text-slate-400" />
+          <span>{project.year}</span>
+          {project.duration && (
+            <>
+              <span className="text-slate-300">•</span>
+              <span>{project.duration}</span>
+            </>
+          )}
         </div>
-        <div className="flex items-center gap-1">
-          <DollarSign className="w-4 h-4" /> {project.budget ? `$${project.budget.toLocaleString()}` : "—"}
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <Users className="w-4 h-4 text-slate-400" />
+          <span>{project.client}</span>
+        </div>
+        {project.budget && (
+          <div className="flex items-center gap-2 text-sm text-slate-600">
+            <DollarSign className="w-4 h-4 text-slate-400" />
+            <span className="font-semibold">${project.budget.toLocaleString()}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Rating */}
+      {project.rating && project.rating > 0 && (
+        <div className="flex items-center gap-1 mb-3">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-4 h-4 ${
+                i < project.rating! ? 'text-yellow-400 fill-current' : 'text-slate-300'
+              }`}
+            />
+          ))}
+          <span className="text-sm text-slate-600 ml-1">({project.rating}/5)</span>
+        </div>
+      )}
+
+      {/* Footer */}
+      <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+        <span className="text-xs text-slate-500 capitalize">
+          {project.category.replace('_', ' ')}
+        </span>
+        <div className="flex items-center gap-1 text-xs text-slate-400">
+          <Clock className="w-3 h-3" />
+          <span>Updated recently</span>
         </div>
       </div>
     </div>
-  </div>
+  </motion.div>
 );
 
 const exportToCSV = (data: Project[], filename = "projects_export") => {
@@ -403,6 +467,10 @@ const closePreview = () => setPreviewProject(null);
   const [toast, setToast] = useState<null | { msg: string; type: "success" | "error" | "info" | "warning" }>(null);
 
   const [deleteConfirm, setDeleteConfirm] = useState<{ open: boolean; project: Project | null }>({ open: false, project: null });
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [projectsPerPage] = useState(6);
  
  const reloadProjects = async () => {
     const { data, error } = await supabase
@@ -473,6 +541,17 @@ useEffect(() => {
       (categoryFilter === "all" || p.category === categoryFilter) &&
       (priorityFilter === "all" || p.priority === priorityFilter)
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filtered.length / projectsPerPage);
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = filtered.slice(indexOfFirstProject, indexOfLastProject);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, statusFilter, categoryFilter, priorityFilter]);
   
   const openCreate = () => { setEditingProject(null); setFormData({ ...EMPTY_FORM }); setShowModal(true); };
   const openEdit = (p: Project) => { setEditingProject(p); setFormData({ ...p, gallery_raw: (p.gallery ?? []).join(", ") }); setShowModal(true); };
@@ -745,163 +824,368 @@ const total       = projects.length;
  
 
 
-    /* ------------------- rendering ------------------- */
+  /* ------------------- rendering ------------------- */
   return (
-    <div className="h-screen overflow-hidden flex flex-col">
-
-         {toast && (
-      <Toast
-        msg={toast.msg}
-        type={toast.type}
-        onClose={() => setToast(null)}
-      />
-    )}
+    <div className="h-screen overflow-hidden flex flex-col bg-slate-50">
+      {toast && (
+        <Toast
+          msg={toast.msg}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
        
       <TopBar />
-      <main className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-50">
-  
+      
+      <main className="flex-1 overflow-y-auto">
+        <div className="p-6 space-y-6">
+          {/* Enhanced Header with Search and Filters */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Building2 className="w-6 h-6 text-blue-600"/>
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-900">Project Management</h1>
+                  <p className="text-slate-600">Manage and track all construction projects</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <button 
+                  onClick={openCreate} 
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg flex items-center gap-2 font-medium"
+                >
+                  <Plus className="w-5 h-5"/>
+                  New Project
+                </button>
+                
+                <div className="relative" id="export-dropdown">
+                  <button
+                    onClick={() => setShowExportDropdown(!showExportDropdown)}
+                    className="bg-slate-600 text-white px-4 py-3 rounded-lg hover:bg-slate-700 transition-colors flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export
+                  </button>
 
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-semibold text-gray-800 flex items-center gap-2"><Building2 className="w-6 h-6 text-blue-600"/> Projects</h1>
-          <div className="flex gap-2">
-            <button onClick={openCreate} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-1"><Plus className="inline w-4 h-4 mr-1"/> New Project</button>
-           
-             
-          <div className="relative" id="export-dropdown">
-<button
-  onClick={() => setShowExportDropdown(!showExportDropdown)}
-  className="bg-[#1f4c6d] text-white px-4 py-2 rounded hover:bg-[#173a53] flex items-center gap-1"
->
-  <Download className="w-4 h-4" />
-  Export CSV
-</button>
+                  {showExportDropdown && (
+                    <div className="absolute top-full right-0 z-20 mt-2 bg-white border border-slate-200 shadow-xl rounded-lg min-w-[200px] overflow-hidden">
+                      <button
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors text-sm"
+                        onClick={() => {
+                          exportToCSV(projects, "all_projects");
+                          setShowExportDropdown(false);
+                        }}
+                      >
+                        Export All Projects
+                      </button>
+                      <button
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors text-sm"
+                        onClick={() => {
+                          exportToCSV(projects.filter((p) => p.status === "planning"), "planning_projects");
+                          setShowExportDropdown(false);
+                        }}
+                      >
+                        Export Planning Projects
+                      </button>
+                      <button
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors text-sm"
+                        onClick={() => {
+                          exportToCSV(projects.filter((p) => p.status === "in_progress"), "in_progress_projects");
+                          setShowExportDropdown(false);
+                        }}
+                      >
+                        Export Active Projects
+                      </button>
+                      <button
+                        className="w-full text-left px-4 py-3 hover:bg-slate-50 transition-colors text-sm"
+                        onClick={() => {
+                          exportToCSV(projects.filter((p) => p.status === "completed"), "completed_projects");
+                          setShowExportDropdown(false);
+                        }}
+                      >
+                        Export Completed Projects
+                      </button>
+                    </div>
+                  )}
+                </div>
+                
+                <button
+                  onClick={() => setViewMode(viewMode === "cards" ? "calendar" : "cards")}
+                  className="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                >
+                  <Calendar className="w-4 h-4" />
+                  {viewMode === "cards" ? "Calendar" : "Cards"}
+                </button>
+              </div>
+            </div>
 
+            {/* Enhanced Search and Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search projects..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-800"
+                />
+                <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+              </div>
+              
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-800"
+              >
+                <option value="all">All Status</option>
+                <option value="planning">Planning</option>
+                <option value="in_progress">In Progress</option>
+                <option value="completed">Completed</option>
+                <option value="on_hold">On Hold</option>
+              </select>
 
-  {showExportDropdown && (
-    <div className="absolute top-full right-0 z-20 mt-1 bg-white border shadow rounded min-w-[200px] text-sm">
-      <button
-        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-        onClick={() => {
-          exportToCSV(projects, "all_projects");
-          setShowExportDropdown(false);
-        }}
-      >
-        Export All Projects
-      </button>
-      <button
-        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-        onClick={() => {
-          exportToCSV(projects.filter((p) => p.status === "planning"), "planning_projects");
-          setShowExportDropdown(false);
-        }}
-      >
-        Export Planning
-      </button>
-      <button
-        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-        onClick={() => {
-          exportToCSV(projects.filter((p) => p.status === "in_progress"), "in_progress_projects");
-          setShowExportDropdown(false);
-        }}
-      >
-        Export In Progress
-      </button>
-      <button
-        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-        onClick={() => {
-          exportToCSV(projects.filter((p) => p.status === "completed"), "completed_projects");
-          setShowExportDropdown(false);
-        }}
-      >
-        Export Completed
-      </button> 
-      <button
-        className="w-full text-left px-4 py-2 hover:bg-gray-100"
-        onClick={() => {
-          exportToCSV(projects.filter((p) => p.status === "on_hold"), "on_hold_projects");
-          setShowExportDropdown(false);
-        }}
-      >
-        Export On Hold
-      </button>
-    </div>
-  )}
-</div>
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-800"
+              >
+                <option value="all">All Categories</option>
+                <option value="residential">Residential</option>
+                <option value="commercial">Commercial</option>
+                <option value="infrastructure">Infrastructure</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="education">Education</option>
+              </select>
 
-
-            
-            <button
-  onClick={() => setViewMode(viewMode === "cards" ? "calendar" : "cards")}
-className="bg-[#3d9392] text-white px-4 py-2 rounded hover:bg-[#1b3d5a] flex items-center gap-1"
->
-  <Calendar className="w-4 h-4" />
-  {viewMode === "cards" ? "Calendar" : "Card View"}
-</button>
-
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-gray-800"
+              >
+                <option value="latest">Latest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="status">By Status</option>
+                <option value="client">By Client</option>
+              </select>
+            </div>
           </div>
+
+          {/* Enhanced Statistics Dashboard */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 cursor-pointer hover:shadow-md transition-all"
+              onClick={() => openStatusModal("all")}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600 mb-1">Total Projects</p>
+                  <p className="text-3xl font-bold text-slate-900">{total}</p>
+                  <p className="text-xs text-green-600">↗ Active</p>
+                </div>
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Building2 className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 cursor-pointer hover:shadow-md transition-all"
+              onClick={() => openStatusModal("planning")}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600 mb-1">Planning</p>
+                  <p className="text-3xl font-bold text-slate-900">{planning}</p>
+                  <p className="text-xs text-blue-600">In planning phase</p>
+                </div>
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Lightbulb className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 cursor-pointer hover:shadow-md transition-all"
+              onClick={() => openStatusModal("in_progress")}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600 mb-1">Active</p>
+                  <p className="text-3xl font-bold text-slate-900">{in_progress}</p>
+                  <p className="text-xs text-green-600">In progress</p>
+                </div>
+                <div className="p-3 bg-green-100 rounded-lg">
+                  <CheckCircle className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 cursor-pointer hover:shadow-md transition-all"
+              onClick={() => openStatusModal("completed")}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600 mb-1">Completed</p>
+                  <p className="text-3xl font-bold text-slate-900">{completed}</p>
+                  <p className="text-xs text-yellow-600">Finished</p>
+                </div>
+                <div className="p-3 bg-yellow-100 rounded-lg">
+                  <Star className="w-6 h-6 text-yellow-600" />
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ y: -2 }}
+              className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 cursor-pointer hover:shadow-md transition-all"
+              onClick={() => openStatusModal("on_hold")}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-600 mb-1">On Hold</p>
+                  <p className="text-3xl font-bold text-slate-900">{onHold}</p>
+                  <p className="text-xs text-orange-600">Paused</p>
+                </div>
+                <div className="p-3 bg-orange-100 rounded-lg">
+                  <AlertCircle className="w-6 h-6 text-orange-600" />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Enhanced Projects Display */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-slate-900">Recent Projects</h2>
+              <span className="text-sm text-slate-600">
+                Showing {indexOfFirstProject + 1}-{Math.min(indexOfLastProject, filtered.length)} of {filtered.length} projects
+              </span>
+            </div>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span className="ml-3 text-slate-600">Loading projects...</span>
+              </div>
+            ) : viewMode === "calendar" ? (
+              <ProjectCalendarView projects={filtered} onSelect={openPreview} />
+            ) : (
+              <motion.div 
+                layout
+                className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+              >
+                <AnimatePresence>
+                  {currentProjects.map((project) => (
+                    <ProjectCard
+                      key={project.id}
+                      project={project}
+                      onEdit={openEdit}
+                      onDelete={(p) => setDeleteConfirm({ open: true, project: p })}
+                      onPreview={openPreview}
+                      isAdmin={isAdmin}
+                    />
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            )}
+
+            {filtered.length === 0 && !isLoading && (
+              <div className="text-center py-12">
+                <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900 mb-2">No projects found</h3>
+                <p className="text-slate-600 mb-4">Get started by creating your first project</p>
+                <button
+                  onClick={openCreate}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Create Project
+                </button>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {filtered.length > projectsPerPage && (
+              <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-200">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Previous
+                  </button>
+                  
+                  <button
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-slate-600">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  {/* Page numbers */}
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => setCurrentPage(pageNum)}
+                        className={`w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                          currentPage === pageNum
+                            ? 'bg-blue-600 text-white'
+                            : 'text-slate-700 hover:bg-slate-100'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Project Progress Overview */}
+          {projects.length > 0 && (
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+              <h2 className="text-xl font-bold text-slate-900 mb-6">Project Analytics</h2>
+              <div className="h-64 flex items-center justify-center bg-slate-50 rounded-lg">
+                <p className="text-slate-500">Analytics dashboard coming soon</p>
+              </div>
+            </div>
+          )}
         </div>
- 
-        
+      </main>
 
-        {/* Summary */}
-   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <SummaryCardButton
-            label="Total Projects"
-            value={total}
-            icon={<Building2 className="w-6 h-6 text-indigo-600" />}
-            onClick={() => openStatusModal("all")}
-          />
-          <SummaryCardButton
-            label="Planning"
-            value={planning}
-            icon={<Lightbulb className="w-5 h-5 text-blue-500" />}
-            onClick={() => openStatusModal("planning")}
-          />
-          <SummaryCardButton
-            label="Active"
-            value={in_progress}
-            icon={<CheckCircle className="w-6 h-6 text-green-600" />}
-            onClick={() => openStatusModal("in_progress")}
-          />
-          <SummaryCardButton
-            label="Completed"
-            value={completed}
-            icon={<Star className="w-6 h-6 text-yellow-600" />}
-            onClick={() =>  openStatusModal("completed")}
-          />
-          <SummaryCardButton
-            label="On Hold"
-            value={onHold}
-            icon={<AlertCircle className="w-6 h-6 text-orange-600" />}
-            onClick={() => openStatusModal("on_hold")}
-          />
-        </div>
-
-        
-
-        {/* Cards */}
-   {/* ---- Latest 3 cards ---- */}
-       {isLoading ? (
-  <p>Loading…</p>
-) : viewMode === "calendar" ? (
-  <ProjectCalendarView projects={projects} onSelect={openPreview} />
-) : (
-  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    {projects.slice(0, 3).map((p) => (
-      <ProjectCard
-        key={p.id}
-        project={p}
-        onEdit={openEdit}
-       onDelete={(p) => setDeleteConfirm({ open: true, project: p })}
-        onPreview={openPreview}
-        isAdmin={isAdmin}
-      />
-    ))}
-  </div>
-)}
- 
-        <ProjectProgressOverview projects={projects} />
+      {/* Modals and overlays */}
 
          
          {/* ---- Status modal ---- */}
@@ -986,12 +1270,8 @@ className="bg-[#3d9392] text-white px-4 py-2 rounded hover:bg-[#1b3d5a] flex ite
   </Modal>
 )}
 
-
-
-        {toast && <div className={`p-3 rounded text-sm ${toast.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{toast.msg}</div>}
-      </main>
-
-    {previewProject && (
+      {/* Preview Modal */}
+      {previewProject && (
   <Modal title={`Preview: ${previewProject.title}`} onClose={closePreview}>
     <div className="space-y-6 max-h-[80vh] overflow-y-auto pr-1">
 
@@ -1633,58 +1913,28 @@ className="bg-[#3d9392] text-white px-4 py-2 rounded hover:bg-[#1b3d5a] flex ite
 
 
               {/* --- Actions --- */}
-        {/* --- Actions --- */}
-<div className="flex flex-col sm:flex-row justify-between items-center pt-4 gap-2">
-  {/* Error Toast (inline in modal) */}
- {toast && (
-  <Toast
-    msg={toast.msg}
-    type={toast.type}
-    onClose={() => setToast(null)}
-  />
-)}
-
-  <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
-  <button onClick={() => onPreview(project)} className="text-gray-600 hover:text-gray-800" title="Preview">
-    <Eye className="w-4 h-4" />
-  </button>
-  <button onClick={() => onEdit(project)} className="text-blue-600 hover:text-blue-800">
-    <Edit className="w-4 h-4" />
-  </button>
-  {isAdmin && (
-    <button onClick={() => onDelete(project)} className="text-red-600 hover:text-red-800">
-      <Trash2 className="w-4 h-4" />
-    </button>
-  )}
-</div>
-
-  <div className="flex gap-2">
-    <button
-      type="button"
-      onClick={closeModal}
-      className="px-4 py-2 rounded border"
-    >
-      Cancel
-    </button>  
-  <button
-  type="submit"
-  disabled={isLoading}
-  className="px-4 py-2 rounded bg-blue-600 text-white disabled:opacity-50"
->
-  {isLoading
-    ? editingProject
-      ? "Updating..."
-      : "Creating..."
-    : editingProject
-    ? "Update"
-    : "Create"}
-</button>
-
-  </div>
-</div>
-  
-
- 
+              <div className="flex justify-end gap-2 pt-4">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 rounded border border-gray-300 text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {isLoading
+                    ? editingProject
+                      ? "Updating..."
+                      : "Creating..."
+                    : editingProject
+                    ? "Update"
+                    : "Create"}
+                </button>
+              </div>
           </form>  
         </Modal>
       )}
@@ -1717,8 +1967,10 @@ className="bg-[#3d9392] text-white px-4 py-2 rounded hover:bg-[#1b3d5a] flex ite
           </button>
           <button
             onClick={async () => {
-              setDeleteConfirm({ open: false, project: null });
-              await deleteProject(deleteConfirm.project);
+              if (deleteConfirm.project) {
+                setDeleteConfirm({ open: false, project: null });
+                await deleteProject(deleteConfirm.project);
+              }
             }}
             className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
           >

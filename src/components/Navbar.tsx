@@ -104,7 +104,6 @@ const Navbar = () => {
   };
   
   const navItems = [
-    { name: t('HOME'), path: '/', sectionId: 'home', key: 'HOME' },
     { name: t('SERVICES'), path: '/services', sectionId: 'services', key: 'SERVICES' },
     { name: t('PRODUCTS'), path: '/products', sectionId: 'products', key: 'PRODUCTS' },
     { name: t('PROJECTS'), path: '/projects', sectionId: 'projects', key: 'PROJECTS' },

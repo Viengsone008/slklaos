@@ -193,7 +193,7 @@ const Projects = () => {
               <Trans as="span">Our</Trans> <span className="text-[#3d9392]"><Trans as="span">Projects</Trans></span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {t('projects.subtitle')}
+              Discover our portfolio of exceptional construction projects, showcasing innovative design, superior craftsmanship, and uncompromising quality across residential and commercial developments.
             </p>
           </div>
         </AnimatedSection>
@@ -259,11 +259,10 @@ const Projects = () => {
                           e.stopPropagation();
                           handleViewProject(project.id);
                         }}
-                        className="inline-flex items-center bg-gradient-to-r from-[#6dbeb0] via-[#3d9392] to-[#1b3d5a] text-white px-5 py-2 rounded-lg font-semibold shadow-lg hover:from-[#3d9392] hover:to-[#6dbeb0] transition-all duration-300 group/btn relative overflow-hidden ripple"
+                        className="inline-flex items-center bg-gradient-to-r from-[#3d9392] to-[#6dbeb0] text-white px-6 py-3 rounded-xl hover:from-[#6dbeb0] hover:to-[#3d9392] transition-all duration-300 font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 relative overflow-hidden"
                       >
                         {t('Project Details')}
-                        <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform group-hover/btn:scale-110 group-hover/btn:text-[#6dbeb0]" />
-                        <span className="absolute inset-0 pointer-events-none" />
+                        <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:scale-110" />
                       </button>
                     </div>
                     {/* Hover Reveal Overlay */}
@@ -276,11 +275,10 @@ const Projects = () => {
                           e.stopPropagation();
                           handleViewProject(project.id);
                         }}
-                        className="inline-flex items-center bg-white text-[#3d9392] px-5 py-2 rounded-lg font-semibold shadow-lg hover:bg-[#6dbeb0] hover:text-white transition-all duration-300 relative overflow-hidden ripple"
+                        className="inline-flex items-center bg-gradient-to-r from-[#3d9392] to-[#6dbeb0] text-white px-6 py-3 rounded-xl hover:from-[#6dbeb0] hover:to-[#3d9392] transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 relative overflow-hidden"
                       >
                         {t('Project Details')}
-                        <ArrowRight className="h-4 w-4 ml-2 group-hover:scale-110 group-hover:text-[#6dbeb0] transition-transform" />
-                        <span className="absolute inset-0 pointer-events-none" />
+                        <ArrowRight className="h-5 w-5 ml-2 transition-transform group-hover:scale-110" />
                       </button>
                     </div>
                   </div>
@@ -290,17 +288,17 @@ const Projects = () => {
           </div>
         ))}
 
-        <AnimatedSection delay={0.6}>
-          <div className="text-center mt-12">
+        {/* View All Projects Button after category sections */}
+        <AnimatedSection delay={0.4}>
+          <div className="text-center mt-16 mb-12">
             <button
               onClick={handleViewAllProjects}
-              className="inline-flex items-center bg-[#3d9392] text-white px-8 py-3 rounded-lg hover:bg-[#6dbeb0] transition-colors font-medium relative overflow-hidden ripple"
+              className="inline-flex items-center bg-gradient-to-r from-[#3d9392] to-[#6dbeb0] text-white px-10 py-4 rounded-xl hover:from-[#6dbeb0] hover:to-[#3d9392] transition-all duration-300 font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 relative overflow-hidden"
             >
-              {t('projects.viewAll')}
-              <ExternalLink className="h-5 w-5 ml-2 group-hover:scale-110 group-hover:text-[#6dbeb0] transition-transform" />
-              <span className="absolute inset-0 pointer-events-none" />
+              {t('View All Projects')}
+              <ExternalLink className="h-6 w-6 ml-3 transition-transform group-hover:scale-110" />
             </button>
-          </div> 
+          </div>
         </AnimatedSection>
       </div>
     </section>

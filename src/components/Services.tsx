@@ -54,7 +54,8 @@ const Services = () => {
       brochureUrl: "#",
       faqs: [
         { q: "Do you offer design consultations?", a: "Yes, we provide full consultations for all projects." }
-      ]
+      ],
+      productLink: "/products#construction-materials"
     },
     {
       icon: Shield,
@@ -78,7 +79,8 @@ const Services = () => {
       brochureUrl: "#",
       faqs: [
         { q: "What materials do you use?", a: "We use only premium, certified waterproofing materials." }
-      ]
+      ],
+      productLink: "/products#waterproofing"
     },
     {
       icon: Layers,
@@ -102,7 +104,8 @@ const Services = () => {
       brochureUrl: "#",
       faqs: [
         { q: "Can you do custom designs?", a: "Absolutely! We specialize in custom flooring solutions." }
-      ]
+      ],
+      productLink: "/products#flooring"
     }
   ];
 
@@ -147,16 +150,15 @@ const Services = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => {
               const IconComponent = service.icon;
-              const sectionId = service.title.toLowerCase().replace(/\s+/g, '-');
               return (
                 <a
                   key={index}
-                  href={`/services#${sectionId}`}
+                  href={service.productLink}
                   className="block group no-underline focus:outline-none focus:ring-2 focus:ring-[#6dbeb0]"
                   style={{ color: 'inherit' }}
                   tabIndex={0}
                   role="link"
-                  aria-label={`View details for ${service.title}`}
+                  aria-label={`View ${service.title} products and materials`}
                 >
                   <AnimatedSection
                     animation="fade-up"
@@ -236,7 +238,7 @@ const Services = () => {
                           aria-hidden="true"
                         >
                           <span className="flex items-center gap-2">
-                            <Trans as="span">Learn More</Trans>
+                            <Trans as="span">View Products</Trans>
                             <ArrowRight className="w-5 h-5 align-middle" />
                           </span>
                         </div>

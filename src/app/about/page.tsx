@@ -147,7 +147,7 @@ const AboutPage = () => {
       name: "Mark Janos Juhasz",
       position: "Founder & CEO",
       image: "https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Mr.%20Mark%20Janos%20Juhasz.JPG",
-      description: "With over 20 years in construction, Mark founded SLK Trading with a vision to transform Laos' construction industry.",
+      description: "With over 25 years in construction, Mark founded SLK Trading with a vision to transform Laos' construction industry.",
       specialties: ["Strategic Planning", "Business Development", "Industry Relations"]
     },
     { 
@@ -160,14 +160,14 @@ const AboutPage = () => {
     {
       name: "Khamla Sisavath",
       position: "Operations Director",
-      image: "https://images.pexels.com/photos/3862347/pexels-photo-3862347.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Mr.%20Mark%20Janos%20Juhasz.JPG",
       description: "Ensuring smooth operations and maintaining our high standards across all projects.",
       specialties: ["Operations Management", "Supply Chain", "Team Leadership"]
     },
     {
       name: "Viengxay Chanthabouly",
       position: "Design Manager",
-      image: "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg?auto=compress&cs=tinysrgb&w=400",
+      image: "https://qawxuytlwqmsomsqlrsc.supabase.co/storage/v1/object/public/image//Mr.%20Chitpaseut%20Somlith.JPG",
       description: "Creative visionary behind our innovative designs and architectural solutions.",
       specialties: ["Architectural Design", "3D Modeling", "Interior Design"]
     }
@@ -635,27 +635,198 @@ const AboutPage = () => {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-[#6dbeb0] to-[#336675] text-white">
+        {/* Luxury Client Testimonial Section */}
+        <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-[#e5e2d6] to-[#bfa76a]/10">
           <div className="container mx-auto px-4">
-            <AnimatedSection className="text-center">
-              <h2 className="text-4xl font-bold mb-6">Ready to Work With Us?</h2>
-              <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                Join our family of satisfied clients and experience the SLK Trading difference
+            <AnimatedSection className="text-center mb-20">
+              <h2 className="text-5xl font-extrabold mb-6" style={{ fontFamily: 'Playfair Display, serif', color: '#1a2936' }}>
+                What Our <span className="text-[#bfa76a]">Clients Say</span>
+              </h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] rounded-full mb-8 mx-auto opacity-80" />
+              <p className="text-xl text-[#1a2936] max-w-3xl mx-auto">
+                Discover how we deliver luxury, trust, and excellence through the voices of our clients
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            </AnimatedSection>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
+              {/* Testimonial 1 */}
+              <AnimatedSection animation="fade-up" delay={0} className="relative">
+                <div className="backdrop-blur-lg bg-white/70 border border-[#bfa76a]/30 p-10 rounded-3xl shadow-2xl hover:shadow-gold transition-all duration-300">
+                  <div className="flex items-center mb-6">
+                    <img src="/SLK-logo.png" alt="Client" className="w-16 h-16 rounded-full border-4 border-[#bfa76a]/40 shadow-lg mr-4" />
+                    <div>
+                      <span className="text-lg font-bold text-[#bfa76a]" style={{ fontFamily: 'Playfair Display, serif' }}>Sokpaseuth V.</span>
+                      <div className="text-sm text-[#1a2936]">CEO, Luxury Real Estate Group</div>
+                    </div>
+                  </div>
+                  <p className="text-lg text-[#1a2936] font-medium mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    “SLK exceeded our expectations in every way. Their attention to detail and commitment to luxury is unmatched. Our new headquarters is a true masterpiece.”
+                  </p>
+                  <div className="flex gap-1 justify-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-[#bfa76a]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.174 9.393c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.966z" /></svg>
+                    ))}
+                  </div>
+                </div>
+              </AnimatedSection>
+              {/* Testimonial 2 */}
+              <AnimatedSection animation="fade-up" delay={150} className="relative">
+                <div className="backdrop-blur-lg bg-white/70 border border-[#bfa76a]/30 p-10 rounded-3xl shadow-2xl hover:shadow-gold transition-all duration-300">
+                  <div className="flex items-center mb-6">
+                    <img src="/SLK-logo.png" alt="Client" className="w-16 h-16 rounded-full border-4 border-[#bfa76a]/40 shadow-lg mr-4" />
+                    <div>
+                      <span className="text-lg font-bold text-[#bfa76a]" style={{ fontFamily: 'Playfair Display, serif' }}>Chansamone T.</span>
+                      <div className="text-sm text-[#1a2936]">Managing Director, Golden Palace</div>
+                    </div>
+                  </div>
+                  <p className="text-lg text-[#1a2936] font-medium mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    “From start to finish, SLK’s team was professional, creative, and responsive. The final result is both luxurious and functional. Highly recommended!”
+                  </p>
+                  <div className="flex gap-1 justify-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-[#bfa76a]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.174 9.393c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.966z" /></svg>
+                    ))}
+                  </div>
+                </div>
+              </AnimatedSection>
+              {/* Testimonial 3 */}
+              <AnimatedSection animation="fade-up" delay={300} className="relative">
+                <div className="backdrop-blur-lg bg-white/70 border border-[#bfa76a]/30 p-10 rounded-3xl shadow-2xl hover:shadow-gold transition-all duration-300">
+                  <div className="flex items-center mb-6">
+                    <img src="/SLK-logo.png" alt="Client" className="w-16 h-16 rounded-full border-4 border-[#bfa76a]/40 shadow-lg mr-4" />
+                    <div>
+                      <span className="text-lg font-bold text-[#bfa76a]" style={{ fontFamily: 'Playfair Display, serif' }}>Thipphavanh S.</span>
+                      <div className="text-sm text-[#1a2936]">Owner, Luxe Boutique Hotel</div>
+                    </div>
+                  </div>
+                  <p className="text-lg text-[#1a2936] font-medium mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
+                    “The SLK team brought our vision to life with elegance and precision. The craftsmanship and luxury finishes are truly world-class.”
+                  </p>
+                  <div className="flex gap-1 justify-center mb-2">
+                    {[...Array(5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-[#bfa76a]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.966a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.921-.755 1.688-1.54 1.118l-3.38-2.455a1 1 0 00-1.175 0l-3.38 2.455c-.784.57-1.838-.197-1.539-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.174 9.393c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.966z" /></svg>
+                    ))}
+                  </div>
+                </div>
+              </AnimatedSection>
+            </div>
+          </div>
+        </section>
+        {/* CTA Section */}
+        <section className="py-24 bg-gradient-to-br from-[#bfa76a] via-[#e5e2d6] to-[#6dbeb0] text-white relative overflow-hidden">
+          {/* Background decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24 animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/4 w-32 h-32 bg-white/5 rounded-full animate-bounce"></div>
+          
+          <div className="container mx-auto px-4 relative z-10">
+            <AnimatedSection className="text-center">
+              {/* Icon */}
+              <div className="mb-8">
+                <div className="bg-white/20 p-6 rounded-full inline-flex mb-6 backdrop-blur-sm border border-white/30">
+                  <Building2 className="w-12 h-12 text-white" />
+                </div>
+              </div>
+
+              {/* Main Heading */}
+              <h2 className="text-5xl lg:text-6xl font-extrabold mb-6 text-[#1a2936]" style={{ fontFamily: 'Playfair Display, serif' }}>
+                Ready to Work With <span className="text-white drop-shadow-lg">Us?</span>
+              </h2>
+              
+              {/* Decorative line */}
+              <div className="flex justify-center mb-8">
+                <div className="h-1 w-32 bg-gradient-to-r from-white via-[#1a2936] to-white rounded-full opacity-80"></div>
+              </div>
+
+              {/* Subtitle */}
+              <p className="text-xl lg:text-2xl text-[#1a2936] mb-12 max-w-4xl mx-auto leading-relaxed font-medium">
+                Join our family of <span className="font-bold text-white">500+</span> satisfied clients and experience the 
+                <span className="font-bold text-white"> SLK Trading difference</span> - where vision meets reality
+              </p>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12 max-w-4xl mx-auto">
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <div className="text-3xl font-bold text-white mb-2">500+</div>
+                  <div className="text-sm text-[#1a2936] font-medium">Happy Clients</div>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <div className="text-3xl font-bold text-white mb-2">15+</div>
+                  <div className="text-sm text-[#1a2936] font-medium">Years Experience</div>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <div className="text-3xl font-bold text-white mb-2">98%</div>
+                  <div className="text-sm text-[#1a2936] font-medium">Success Rate</div>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 border border-white/30">
+                  <div className="text-3xl font-bold text-white mb-2">24/7</div>
+                  <div className="text-sm text-[#1a2936] font-medium">Support</div>
+                </div>
+              </div>
+
+              {/* Why Choose Us */}
+              <div className="mb-12">
+                <h3 className="text-2xl font-bold text-[#1a2936] mb-6">Why Choose SLK Trading?</h3>
+                <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <Award className="w-8 h-8 text-white mx-auto mb-4" />
+                    <h4 className="font-bold text-white mb-2">Premium Quality</h4>
+                    <p className="text-sm text-[#1a2936]">World-class materials and craftsmanship</p>
+                  </div>
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <Clock className="w-8 h-8 text-white mx-auto mb-4" />
+                    <h4 className="font-bold text-white mb-2">On-Time Delivery</h4>
+                    <p className="text-sm text-[#1a2936]">Projects completed within schedule</p>
+                  </div>
+                  <div className="bg-white/15 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                    <Shield className="w-8 h-8 text-white mx-auto mb-4" />
+                    <h4 className="font-bold text-white mb-2">Guaranteed Results</h4>
+                    <p className="text-sm text-[#1a2936]">Full warranty and ongoing support</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-8">
                 <button 
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="bg-white text-[#1b3d5a] hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                  className="bg-white text-[#1a2936] hover:bg-gray-100 px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center group"
                 >
-                  Start Your Project
+                  <ArrowRight className="w-6 h-6 mr-3 group-hover:translate-x-1 transition-transform duration-300" />
+                  Start Your Project Today
                 </button>
                 <button 
                   onClick={handleNavigateToContact}
-                  className="border-2 border-white/30 hover:bg-white/10 text-white px-8 py-4 rounded-lg font-semibold transition-all duration-300"
+                  className="border-2 border-white hover:bg-white/20 text-white px-10 py-5 rounded-xl font-bold text-lg transition-all duration-300 backdrop-blur-sm flex items-center justify-center group"
                 >
-                  Contact Our Team
+                  <Users className="w-6 h-6 mr-3 group-hover:scale-110 transition-transform duration-300" />
+                  Meet Our Team
                 </button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="border-t border-white/30 pt-8">
+                <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Licensed & Insured</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Free Consultation</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Quality Guarantee</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">Competitive Pricing</span>
+                  </div>
+                  <div className="flex items-center text-[#1a2936]">
+                    <CheckCircle className="w-5 h-5 mr-2 text-white" />
+                    <span className="font-medium">24/7 Customer Support</span>
+                  </div>
+                </div>
               </div>
             </AnimatedSection>
           </div>

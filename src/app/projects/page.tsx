@@ -86,14 +86,16 @@ const ProjectsPage: React.FC = () => {
   ];
   // Scroll progress indicator
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       setScrollProgress(progress);
+      setScrollY(scrollTop);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -194,6 +196,24 @@ const ProjectsPage: React.FC = () => {
   ──────────────────────────────────────── */
   return (
     <>
+      <style jsx>{`
+        /* 3D Parallax Effects */
+        .hero-3d-container {
+          perspective: 1000px;
+          transform-style: preserve-3d;
+          overflow: hidden;
+        }
+        
+        .hero-3d-layer {
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+        
+        /* Smooth transitions for 3D elements */
+        .hero-3d-smooth {
+          transition: transform 0.1s ease-out;
+        }
+      `}</style>
       {/* Floating Section Navigation (dots) */}
       {showNav && (
         <nav className="fixed left-4 top-1/2 z-[9999] flex flex-col gap-2 -translate-y-1/2 hidden sm:flex bg-white/40 backdrop-blur-md rounded-2xl p-3 shadow-lg border border-white/30">
@@ -218,27 +238,54 @@ const ProjectsPage: React.FC = () => {
       
       {/* ───────── LIQUID GLASS HERO ───────── */}
 
-      <section ref={heroRef} id="hero" className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+      <section ref={heroRef} id="hero" className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden" style={{ perspective: '1000px' }}>
         {/* Hero Background Image */}
-        <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 z-0"
+          style={{
+            transform: `translateZ(0) translateY(${scrollY * 0.5}px) scale(${1 + scrollY * 0.0001}) rotateX(${scrollY * 0.01}deg)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           <img
             src="https://images.pexels.com/photos/3862365/pexels-photo-3862365.jpeg?auto=compress&cs=tinysrgb&w=1920"
             alt="Construction projects background"
             className="w-full h-full object-cover object-center opacity-30"
             draggable="false"
+            style={{
+              filter: `brightness(${1 - scrollY * 0.0003}) contrast(${1 + scrollY * 0.0002})`
+            }}
           />
           {/* Overlay for contrast - lighter for more visible bg */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-slate-800/60 to-slate-900/70"></div>
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-slate-800/60 to-slate-900/70"
+            style={{
+              transform: `translateZ(10px) translateY(${scrollY * 0.3}px)`,
+              transformStyle: 'preserve-3d'
+            }}
+          ></div>
         </div>
         {/* Animated Background Elements */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
+        <div 
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            transform: `translateZ(20px) translateY(${scrollY * 0.2}px)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.2),transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(236,72,153,0.2),transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
         </div>
 
 
-        <div className="relative z-10 container mx-auto px-6 py-32 flex items-center min-h-screen">
+        <div 
+          className="relative z-10 container mx-auto px-6 py-32 flex items-center min-h-screen"
+          style={{
+            transform: `translateZ(30px) translateY(${scrollY * -0.1}px)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-20">
               {/* Luxury Animated Badge */}
@@ -618,9 +665,15 @@ const ProjectsPage: React.FC = () => {
       </section>
 
       {/* ───────── LIQUID GLASS CTA SECTION ───────── */}
-      <section ref={ctaRef} id="cta" className="py-24 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-3xl text-white relative overflow-hidden">
+      <section ref={ctaRef} id="cta" className="py-24 bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-3xl text-white relative overflow-hidden" style={{ perspective: '800px' }}>
         {/* Background Effects */}
-        <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0"
+          style={{
+            transform: `translateZ(0) translateY(${scrollY * 0.1}px)`,
+            transformStyle: 'preserve-3d'
+          }}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(120,119,198,0.3),transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(236,72,153,0.3),transparent_50%)]"></div>
         </div>

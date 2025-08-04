@@ -545,7 +545,7 @@ const SettingsManagement = () => {
                     type="text"
                     value={settings.siteName}
                     onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -554,7 +554,7 @@ const SettingsManagement = () => {
                     type="url"
                     value={settings.siteUrl}
                     onChange={(e) => setSettings({ ...settings, siteUrl: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
@@ -564,7 +564,7 @@ const SettingsManagement = () => {
                   value={settings.siteDescription}
                   onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                 />
               </div>
             </div>
@@ -577,7 +577,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.timezone}
                     onChange={(e) => setSettings({ ...settings, timezone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="Asia/Vientiane">Asia/Vientiane (GMT+7)</option>
                     <option value="Asia/Bangkok">Asia/Bangkok (GMT+7)</option>
@@ -589,7 +589,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.language}
                     onChange={(e) => setSettings({ ...settings, language: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="en">English</option>
                     <option value="lo">ລາວ (Lao)</option>
@@ -601,7 +601,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.dateFormat}
                     onChange={(e) => setSettings({ ...settings, dateFormat: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="MM/DD/YYYY">MM/DD/YYYY</option>
                     <option value="DD/MM/YYYY">DD/MM/YYYY</option>
@@ -613,7 +613,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.timeFormat}
                     onChange={(e) => setSettings({ ...settings, timeFormat: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="12">12 Hour (AM/PM)</option>
                     <option value="24">24 Hour</option>
@@ -636,7 +636,7 @@ const SettingsManagement = () => {
                     type="text"
                     value={settings.companyName}
                     onChange={(e) => setSettings({ ...settings, companyName: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -645,7 +645,7 @@ const SettingsManagement = () => {
                     type="tel"
                     value={settings.companyPhone}
                     onChange={(e) => setSettings({ ...settings, companyPhone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -654,7 +654,7 @@ const SettingsManagement = () => {
                     type="email"
                     value={settings.companyEmail}
                     onChange={(e) => setSettings({ ...settings, companyEmail: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -663,7 +663,7 @@ const SettingsManagement = () => {
                     type="url"
                     value={settings.companyWebsite}
                     onChange={(e) => setSettings({ ...settings, companyWebsite: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
@@ -673,7 +673,7 @@ const SettingsManagement = () => {
                   value={settings.companyAddress}
                   onChange={(e) => setSettings({ ...settings, companyAddress: e.target.value })}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                 />
               </div>
             </div>
@@ -694,7 +694,7 @@ const SettingsManagement = () => {
                     max="168"
                     value={settings.sessionTimeout}
                     onChange={(e) => setSettings({ ...settings, sessionTimeout: parseInt(e.target.value) || 1 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -705,7 +705,7 @@ const SettingsManagement = () => {
                     max="10"
                     value={settings.maxLoginAttempts}
                     onChange={(e) => setSettings({ ...settings, maxLoginAttempts: parseInt(e.target.value) || 3 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -716,7 +716,7 @@ const SettingsManagement = () => {
                     max="20"
                     value={settings.passwordMinLength}
                     onChange={(e) => setSettings({ ...settings, passwordMinLength: parseInt(e.target.value) || 6 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
@@ -969,7 +969,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.theme}
                     onChange={(e) => setSettings({ ...settings, theme: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="light">Light</option>
                     <option value="dark">Dark (Coming Soon)</option>
@@ -989,7 +989,7 @@ const SettingsManagement = () => {
                       type="text"
                       value={settings.primaryColor}
                       onChange={(e) => setSettings({ ...settings, primaryColor: e.target.value })}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                     />
                   </div>
                 </div>
@@ -1042,7 +1042,7 @@ const SettingsManagement = () => {
                     max="50"
                     value={settings.postsPerPage}
                     onChange={(e) => setSettings({ ...settings, postsPerPage: parseInt(e.target.value) || 5 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
                 <div>
@@ -1050,7 +1050,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.defaultPostStatus}
                     onChange={(e) => setSettings({ ...settings, defaultPostStatus: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
@@ -1064,7 +1064,7 @@ const SettingsManagement = () => {
                     max="300"
                     value={settings.autoSaveInterval}
                     onChange={(e) => setSettings({ ...settings, autoSaveInterval: parseInt(e.target.value) || 10 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
@@ -1115,7 +1115,7 @@ const SettingsManagement = () => {
                   <select
                     value={settings.backupFrequency}
                     onChange={(e) => setSettings({ ...settings, backupFrequency: e.target.value as any })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -1130,7 +1130,7 @@ const SettingsManagement = () => {
                     max="365"
                     value={settings.backupRetention}
                     onChange={(e) => setSettings({ ...settings, backupRetention: parseInt(e.target.value) || 7 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
@@ -1184,7 +1184,7 @@ const SettingsManagement = () => {
                     max="86400"
                     value={settings.cacheExpiration}
                     onChange={(e) => setSettings({ ...settings, cacheExpiration: parseInt(e.target.value) || 300 })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700"
                   />
                 </div>
               </div>
