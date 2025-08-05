@@ -382,7 +382,7 @@ const UserManagement = () => {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 placeholder-gray-700"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -402,7 +402,7 @@ const UserManagement = () => {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 placeholder-gray-700"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -424,7 +424,7 @@ const UserManagement = () => {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 placeholder-gray-700"
                     placeholder="Set user password"
                   />
                 </div>
@@ -443,7 +443,7 @@ const UserManagement = () => {
                     value={formData.login_type}
                     onChange={handleChange}
                     disabled={isLoading}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white text-gray-700"
                   >
                     <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
@@ -466,7 +466,7 @@ const UserManagement = () => {
                     value={formData.role}
                     onChange={handleChange}
                     disabled={isLoading}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white text-gray-700"
                   >
                     <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
@@ -490,7 +490,7 @@ const UserManagement = () => {
                     onChange={handleChange}
                     required
                     disabled={isLoading}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white text-gray-700"
                   >
                     <option value="">Select department...</option>
                     {departmentOptions.map((dept) => (
@@ -514,7 +514,7 @@ const UserManagement = () => {
                     onChange={handleChange}
                     required
                     disabled={isLoading || !formData.department}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-white text-gray-700"
                   >
                     <option value="">
                       {formData.department ? 'Select position...' : 'Select department first...'}

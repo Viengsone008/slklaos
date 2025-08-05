@@ -571,116 +571,210 @@ const Contact = () => {
 
       {/* SUCCESS POPUP MODAL WITH 15-SECOND COUNTDOWN */}
       {success && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 z-[9999] overflow-y-auto">
           {/* Backdrop */}
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm"></div>
           
           {/* Modal */}
-          <div className="relative min-h-screen flex items-center justify-center p-4">
-            <div className="relative bg-white rounded-3xl shadow-2xl max-w-2xl w-full animate-scale-in">
+          <div className="relative min-h-screen flex items-center justify-center p-4 pt-20 pb-8">
+            <div className="relative bg-white rounded-3xl shadow-2xl max-w-3xl w-full animate-scale-in max-h-[90vh] overflow-y-auto">
               {/* Header with Countdown */}
-              <div className="bg-gradient-to-r from-primary to-tertiary text-white p-8 rounded-t-3xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full -ml-16 -mb-16"></div>
+              <div className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white p-6 rounded-t-3xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 animate-pulse"></div>
+                <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12 animate-pulse"></div>
+                <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/5 rounded-full animate-float-slow"></div>
                 
                 {/* Countdown Timer */}
-                <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full p-3 flex items-center space-x-2">
-                  <Clock className="w-5 h-5" />
-                  <span className="font-bold text-lg">{countdown}</span>
+                <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-sm rounded-full p-2 flex items-center space-x-2 shadow-lg border border-white/30">
+                  <Clock className="w-4 h-4 text-white" />
+                  <span className="font-bold text-base text-white">{countdown}</span>
                 </div>
                 
                 <div className="relative z-10 text-center">
-                  <div className="bg-white/20 p-4 rounded-full inline-flex mb-4">
-                    <CheckCircle className="w-12 h-12 text-white" />
+                  <div className="bg-white/20 p-3 rounded-full inline-flex mb-3 shadow-lg backdrop-blur-sm">
+                    <CheckCircle className="w-10 h-10 text-white animate-pulse" />
                   </div>
-                  <h2 className="text-3xl font-bold mb-2">
-                    <Trans as="span">Message Sent Successfully!</Trans>
+                  <h2 className="text-3xl font-bold mb-2 animate-fade-in">
+                    <Trans as="span">🎉 Message Sent Successfully!</Trans>
                   </h2>
-                  <div className="flex items-center justify-center space-x-2">
-                    <Sparkles className="w-5 h-5" />
-                    <p className="text-light text-lg"><Trans as="span">Your inquiry has been received</Trans></p>
-                    <Sparkles className="w-5 h-5" />
+                  <div className="flex items-center justify-center space-x-2 mb-2">
+                    <Sparkles className="w-5 h-5 animate-bounce" />
+                    <p className="text-white/90 text-lg font-medium">
+                      <Trans as="span">Your inquiry has been received by our expert team</Trans>
+                    </p>
+                    <Sparkles className="w-5 h-5 animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  </div>
+                  <div className="bg-white/20 rounded-full px-4 py-1 inline-block backdrop-blur-sm border border-white/30">
+                    <p className="text-white/90 text-xs font-semibold">
+                      ✨ Premium Construction Services • Trusted Since 2010 ✨
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Content */}
-              <div className="p-8">
-                <div className="grid md:grid-cols-2 gap-6 mb-6">
-                  <div className="bg-green-50 p-4 rounded-xl">
-                    <div className="flex items-center text-green-800 mb-2">
-                      <User className="w-5 h-5 mr-2" />
-                      <span className="font-semibold">Contact Details</span>
-                    </div>
-                    <p className="text-sm text-green-700">
-                      👤 Name: <span className="font-semibold">{formData.name}</span>
-                    </p>
-                    <p className="text-sm text-green-700">
-                      📧 Email: <span className="font-semibold">{formData.email}</span>
-                    </p>
-
-                  </div>
-                  
-                  <div className="bg-blue-50 p-4 rounded-xl">
-                    <div className="flex items-center text-blue-800 mb-2">
-                      <Clock className="w-5 h-5 mr-2" />
-                      <span className="font-semibold">Response Timeline</span>
-                    </div>
-                    <p className="text-sm text-blue-700">
-                      👤 Assigned to: <span className="font-semibold">{getAssignedPerson(formData.service)}</span>
+              <div className="p-6 max-h-[calc(90vh-200px)] overflow-y-auto">
+                <div className="text-center mb-6">
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-2xl border border-green-200 mb-4">
+                    <h3 className="text-xl font-bold text-green-800 mb-2">🎉 Thank You for Choosing SLK!</h3>
+                    <p className="text-green-700 text-base leading-relaxed">
+                      Your message has been received and is now being processed by our expert team. 
+                      We appreciate your interest in our premium construction services.
                     </p>
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-2xl border-2 border-green-200 mb-6">
-                  <div className="flex items-center text-green-800 mb-3">
-                    <Calendar className="w-6 h-6 mr-2" />
-                    <span className="text-lg font-bold">What Happens Next?</span>
+                <div className="grid md:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200 shadow-sm">
+                    <div className="flex items-center text-blue-800 mb-3">
+                      <User className="w-5 h-5 mr-2 text-blue-600" />
+                      <span className="font-bold text-base">Your Submission Details</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center text-blue-700">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                        <span className="text-sm">
+                          <strong>Name:</strong> {formData.name}
+                        </span>
+                      </div>
+                      <div className="flex items-center text-blue-700">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                        <span className="text-sm">
+                          <strong>Email:</strong> {formData.email}
+                        </span>
+                      </div>
+                      {formData.service && (
+                        <div className="flex items-center text-blue-700">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                          <span className="text-sm">
+                            <strong>Service:</strong> {formData.service}
+                          </span>
+                        </div>
+                      )}
+                      <div className="mt-3 p-2 bg-blue-100 rounded-lg">
+                        <p className="text-xs text-blue-600 font-semibold">
+                          📋 Reference ID: SLK-{Date.now().toString().slice(-6)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border border-amber-200 shadow-sm">
+                    <div className="flex items-center text-amber-800 mb-3">
+                      <Clock className="w-5 h-5 mr-2 text-amber-600" />
+                      <span className="font-bold text-base">Response Timeline</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-2 bg-amber-100 rounded-lg">
+                        <span className="text-xs font-semibold text-amber-700">Assigned Expert:</span>
+                        <span className="text-xs font-bold text-amber-800">{getAssignedPerson(formData.service)}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-amber-100 rounded-lg">
+                        <span className="text-xs font-semibold text-amber-700">Response Time:</span>
+                        <span className="text-xs font-bold text-amber-800">Within 2-4 hours</span>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-green-100 rounded-lg">
+                        <span className="text-xs font-semibold text-green-700">Priority Level:</span>
+                        <span className="text-xs font-bold text-green-800 uppercase">
+                          {formData.service === 'waterproofing' ? 'HIGH' : 'STANDARD'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-4 rounded-2xl border-2 border-emerald-200 mb-6 shadow-lg">
+                  <div className="flex items-center text-emerald-800 mb-3">
+                    <Calendar className="w-6 h-6 mr-2 text-emerald-600" />
+                    <span className="text-lg font-bold">🚀 What Happens Next?</span>
                   </div>
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center text-green-700">
-                        <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">1</div>
-                        <span className="text-sm">Team reviews your message</span>
+                    <div className="space-y-3">
+                      <div className="flex items-start">
+                        <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0 shadow-md">1</div>
+                        <div>
+                          <h5 className="font-bold text-emerald-800 mb-1 text-sm">Immediate Review</h5>
+                          <p className="text-xs text-emerald-700">Our expert team reviews your message and project requirements within 30 minutes</p>
+                        </div>
                       </div>
-                      <div className="flex items-center text-green-700">
-                        <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">2</div>
-                        <span className="text-sm">Prepare detailed response</span>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center text-green-700">
-                        <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">3</div>
-                        <span className="text-sm">Contact you via preferred method</span>
-                      </div>
-                      <div className="flex items-center text-green-700">
-                        <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">4</div>
-                        <span className="text-sm">Schedule consultation if needed</span>
+                      <div className="flex items-start">
+                        <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0 shadow-md">2</div>
+                        <div>
+                          <h5 className="font-bold text-emerald-800 mb-1 text-sm">Expert Analysis</h5>
+                          <p className="text-xs text-emerald-700">We prepare a detailed response with preliminary recommendations and cost estimates</p>
+                        </div>
                       </div>
                     </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start">
+                        <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0 shadow-md">3</div>
+                        <div>
+                          <h5 className="font-bold text-emerald-800 mb-1 text-sm">Personal Contact</h5>
+                          <p className="text-xs text-emerald-700">We'll reach out via your preferred method with a comprehensive proposal</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start">
+                        <div className="w-7 h-7 bg-emerald-600 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3 flex-shrink-0 shadow-md">4</div>
+                        <div>
+                          <h5 className="font-bold text-emerald-800 mb-1 text-sm">Site Consultation</h5>
+                          <p className="text-xs text-emerald-700">Schedule a free on-site consultation to discuss your project in detail</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-emerald-100 rounded-xl border border-emerald-300">
+                    <div className="flex items-center justify-center text-emerald-800">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      <span className="font-bold text-base">🎯 100% Response Guarantee</span>
+                      <Sparkles className="w-4 h-4 ml-2" />
+                    </div>
+                    <p className="text-center text-emerald-700 text-xs mt-1">
+                      We pride ourselves on responding to every inquiry with professional expertise and care
+                    </p>
                   </div>
                 </div>
 
                 <div className="text-center">
-                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-4">
+                  <div className="bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-200 rounded-xl p-4 mb-4 shadow-md">
                     <div className="flex items-center justify-center text-orange-800 mb-2">
                       <Clock className="w-4 h-4 mr-2" />
-                      <span className="font-bold">Auto-closing in {countdown} seconds</span>
+                      <span className="font-bold text-base">⏰ Auto-closing in {countdown} seconds</span>
                     </div>
-                    <div className="w-full bg-orange-200 rounded-full h-2">
+                    <div className="w-full bg-orange-200 rounded-full h-2 shadow-inner">
                       <div 
-                        className="bg-primary h-2 rounded-full transition-all duration-1000 ease-linear"
+                        className="bg-gradient-to-r from-orange-500 to-amber-500 h-2 rounded-full transition-all duration-1000 ease-linear shadow-sm"
                         style={{ width: `${((15 - countdown) / 15) * 100}%` }}
                       ></div>
                     </div>
+                    <p className="text-orange-700 text-xs mt-2 font-medium">
+                      You can continue browsing or close this message manually
+                    </p>
                   </div>
                   
-                  <button
-                    onClick={handleCloseSuccess}
-                    className="bg-primary hover:bg-tertiary text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg"
-                  >
-                    <Trans as="span">Continue Browsing</Trans>
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button
+                      onClick={handleCloseSuccess}
+                      className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center text-sm"
+                    >
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      <Trans as="span">Continue Browsing</Trans>
+                    </button>
+                    
+                    <a
+                      href="tel:+85621773737"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center text-sm"
+                    >
+                      <Phone className="w-4 h-4 mr-2" />
+                      <Trans as="span">Call Us Now</Trans>
+                    </a>
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <p className="text-xs text-gray-600">
+                      💡 <strong>Pro Tip:</strong> Check your email inbox (including spam folder) for our detailed response within the next few hours
+                    </p>
+                  </div>
                 </div>
               </div>
 

@@ -190,7 +190,7 @@ const ContactPage = () => {
     setError('');
 
     try {
-      if (!formData.name.trim() || !formData.email.trim()) {
+      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
         setError('Please fill in all required fields');
         setIsSubmitting(false);
         return;
@@ -201,7 +201,67 @@ const ContactPage = () => {
       const assignedUser = users.find(u => u.id === assigned_to);
       setAssignedPersonName(assignedUser ? assignedUser.name : 'Customer Service Team');
 
+      // Calculate lead score and other metrics
+      const leadScore = calculateLeadScore(formData);
+      const qualification = getQualification(formData);
+      const conversionProbability = calculateConversionProbability(formData);
+      const estimatedValue = getEstimatedBudget(formData.service, formData.message);
+      const projectLocation = extractLocation(formData.message);
+
+      // Prepare data for contacts table
       const contactData = {
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        phone: formData.phone.trim() || null,
+        company: formData.company.trim() || null,
+        service: formData.service || null,
+        subject: formData.subject.trim() || null,
+        message: formData.message.trim(),
+        preferred_contact: formData.preferredContact, // snake_case for database
+        status: 'new',
+        priority: formData.urgency,
+        source: 'website',
+        assigned_to: assigned_to || null,
+        lead_score: leadScore,
+        estimated_value: estimatedValue,
+        conversion_probability: conversionProbability,
+        customer_profile: {
+          qualification: qualification,
+          responseTime: getResponseTime(formData.urgency),
+          serviceInterest: formData.service,
+          companySize: formData.company ? 'business' : 'individual'
+        },
+        project_context: {
+          location: projectLocation,
+          urgency: formData.urgency,
+          estimatedBudget: estimatedValue,
+          serviceType: formData.service
+        },
+        internal_notes: {
+          source: 'contact_form',
+          submissionTime: new Date().toISOString(),
+          userAgent: navigator.userAgent
+        }
+      };
+
+      // Save to contacts table
+      const { data, error: dbError } = await supabase
+        .from('contacts')
+        .insert([contactData])
+        .select()
+        .single();
+
+      if (dbError) {
+        console.error('❌ Database error:', dbError);
+        setError('Failed to save your message. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log('✅ Contact saved to database:', data);
+
+      // Send email notification
+      const emailData = {
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         phone: formData.phone.trim(),
@@ -209,15 +269,14 @@ const ContactPage = () => {
         service: formData.service,
         subject: formData.subject.trim(),
         message: formData.message.trim(),
-        preferredContact: formData.preferredContact, // camelCase for frontend
+        preferredContact: formData.preferredContact, // camelCase for email API
         urgency: formData.urgency,
       };
 
-      // Send email notification with ALL fields and correct names
       await fetch('/api/send-contact-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contactData),
+        body: JSON.stringify(emailData),
       });
 
       setSuccess(true);

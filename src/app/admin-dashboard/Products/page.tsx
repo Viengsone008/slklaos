@@ -641,7 +641,7 @@ const ProductManagement: React.FC = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by product name..."
-                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-700 placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all duration-200"
               />
             </div>
           </div>
@@ -1056,7 +1056,7 @@ const ProductManagement: React.FC = () => {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="Enter product name"
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700"
                   />
                 </div>
               </div>
@@ -1122,7 +1122,7 @@ const ProductManagement: React.FC = () => {
                     value={form.price ?? ""}
                     onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
                     placeholder="0.00"
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700"
                   />
                 </div>
               </div>
@@ -1139,7 +1139,7 @@ const ProductManagement: React.FC = () => {
                     value={form.rating ?? ""}
                     onChange={(e) => setForm({ ...form, rating: Number(e.target.value) })}
                     placeholder="0.0"
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700"
                   />
                 </div>
               </div>
@@ -1153,7 +1153,7 @@ const ProductManagement: React.FC = () => {
                     value={form.description ?? ""}
                     onChange={(e) => setForm({ ...form, description: e.target.value })}
                     placeholder="Brief product description..."
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500 resize-none"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700 resize-none"
                   />
                 </div>
               </div>
@@ -1166,7 +1166,7 @@ const ProductManagement: React.FC = () => {
                     value={form.long_description ?? ""}
                     onChange={(e) => setForm({ ...form, long_description: e.target.value })}
                     placeholder="Detailed product description..."
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500 resize-none"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700 resize-none"
                   />
                 </div>
               </div>
@@ -1180,7 +1180,7 @@ const ProductManagement: React.FC = () => {
                     value={form.features_raw ?? ""}
                     onChange={(e) => setForm({ ...form, features_raw: e.target.value })}
                     placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
-                    className="w-full outline-none bg-transparent text-gray-900 placeholder-gray-500 resize-none"
+                    className="w-full outline-none bg-transparent text-gray-700 placeholder-gray-700 resize-none"
                   />
                 </div>
               </div>

@@ -427,7 +427,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ post, onBack }) => {
                 value={formData.title || ""}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-lg placeholder-gray-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-lg text-gray-700 placeholder-gray-700"
                 placeholder="Enter post title..."
               />
             </div>
@@ -443,7 +443,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ post, onBack }) => {
                 onChange={handleChange}
                 required
                 rows={15}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none placeholder-gray-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none text-gray-700 placeholder-gray-700"
                 placeholder="Write your post content here..."
               />
             </div>
@@ -458,7 +458,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ post, onBack }) => {
                 value={formData.excerpt || ""}
                 onChange={handleChange}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none placeholder-gray-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none text-gray-700 placeholder-gray-700"
                 placeholder="Brief description of the post..."
               />
               <p className="text-sm text-gray-500 mt-2">
@@ -641,7 +641,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ post, onBack }) => {
                   name="featuredImage"
                   value={formData.featuredImage || ""}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder-gray-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   placeholder="Paste image URL or upload below"
                 />
 
@@ -682,7 +682,7 @@ const PostEditor: React.FC<PostEditorProps> = ({ post, onBack }) => {
                     value={tagInput || ""}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder-gray-500"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Add a tag and press Enter"
                   />
                   <button

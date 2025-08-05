@@ -411,7 +411,7 @@ const ContactManagement = () => {
                     value={formData.name}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -426,7 +426,7 @@ const ContactManagement = () => {
                     value={formData.email}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -440,7 +440,7 @@ const ContactManagement = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -454,7 +454,7 @@ const ContactManagement = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter company name"
                   />
                 </div>
@@ -474,7 +474,7 @@ const ContactManagement = () => {
                     name="service"
                     value={formData.service}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="">Select service</option>
                     <option value="construction">Design & Construction</option>
@@ -496,7 +496,7 @@ const ContactManagement = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter subject"
                   />
                 </div>
@@ -511,7 +511,7 @@ const ContactManagement = () => {
                     onChange={handleFormChange}
                     required
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter message"
                   ></textarea>
                 </div>
@@ -531,7 +531,7 @@ const ContactManagement = () => {
                     name="preferred_contact"
                     value={formData.preferred_contact}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
@@ -547,7 +547,7 @@ const ContactManagement = () => {
                     name="urgency"
                     value={formData.urgency}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -564,7 +564,7 @@ const ContactManagement = () => {
                     name="source"
                     value={formData.source}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="website">Website</option>
                     <option value="phone">Phone Call</option>
@@ -591,7 +591,7 @@ const ContactManagement = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="new">New</option>
                     <option value="contacted">Contacted</option>
@@ -609,7 +609,7 @@ const ContactManagement = () => {
                     name="priority"
                     value={formData.priority}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -625,7 +625,7 @@ const ContactManagement = () => {
                     name="assigned_to"
                     value={formData.assigned_to}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   >
                     <option value="">Unassigned</option>
                     {Array.isArray(users) && users.map(user => (
@@ -645,7 +645,7 @@ const ContactManagement = () => {
                     name="follow_up_date"
                     value={formData.follow_up_date}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                   />
                 </div>
               </div>
@@ -667,7 +667,7 @@ const ContactManagement = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter lead score"
                   />
                 </div>
@@ -684,7 +684,7 @@ const ContactManagement = () => {
                       value={formData.estimated_value}
                       onChange={handleFormChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                       placeholder="Enter estimated value"
                     />
                   </div>
@@ -701,7 +701,7 @@ const ContactManagement = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
                     placeholder="Enter conversion probability"
                   />
                 </div>
@@ -1043,7 +1043,7 @@ const ContactManagement = () => {
               placeholder="Search contacts..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
             />
           </div>
 
@@ -1052,7 +1052,7 @@ const ContactManagement = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
             >
               <option value="all">All Statuses</option>
               <option value="new">New</option>
@@ -1068,7 +1068,7 @@ const ContactManagement = () => {
             <select
               value={sourceFilter}
               onChange={(e) => setSourceFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
             >
               <option value="all">All Sources</option>
               {sources.map(source => (
@@ -1084,7 +1084,7 @@ const ContactManagement = () => {
             <select
               value={assigneeFilter}
               onChange={(e) => setAssigneeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 placeholder-gray-500 font-medium"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700 font-medium"
             >
               <option value="all">All Assignees</option>
               <option value="">Unassigned</option>

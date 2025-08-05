@@ -642,7 +642,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.name}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter full name"
                   />
                 </div>
@@ -658,7 +658,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.email}
                     onChange={handleFormChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter email address"
                   />
                 </div>
@@ -673,7 +673,7 @@ const QuoteManagement: React.FC = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter phone number"
                   />
                 </div>
@@ -688,7 +688,7 @@ const QuoteManagement: React.FC = () => {
                     name="company"
                     value={formData.company}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter company name"
                   />
                 </div>
@@ -708,7 +708,7 @@ const QuoteManagement: React.FC = () => {
                     name="project_type"
                     value={formData.project_type}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="">Select project type</option>
                     {projectTypes.map(type => (
@@ -728,7 +728,7 @@ const QuoteManagement: React.FC = () => {
                     name="budget_range"
                     value={formData.budget_range}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="">Select budget range</option>
                     <option value="under-10000">Under $10,000</option>
@@ -750,7 +750,7 @@ const QuoteManagement: React.FC = () => {
                     name="timeline"
                     value={formData.timeline}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="">Select timeline</option>
                     <option value="asap">ASAP</option>
@@ -772,7 +772,7 @@ const QuoteManagement: React.FC = () => {
                     name="location"
                     value={formData.location}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter project location"
                   />
                 </div>
@@ -787,7 +787,7 @@ const QuoteManagement: React.FC = () => {
                     value={formData.description}
                     onChange={handleFormChange}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter project description"
                   ></textarea>
                 </div>
@@ -807,7 +807,7 @@ const QuoteManagement: React.FC = () => {
                     name="preferred_contact"
                     value={formData.preferred_contact}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="email">Email</option>
                     <option value="phone">Phone</option>
@@ -824,7 +824,7 @@ const QuoteManagement: React.FC = () => {
                     name="source"
                     value={formData.source}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="website">Website</option>
                     <option value="phone">Phone Call</option>
@@ -851,7 +851,7 @@ const QuoteManagement: React.FC = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="new">New</option>
                     <option value="reviewing">Reviewing</option>
@@ -870,7 +870,7 @@ const QuoteManagement: React.FC = () => {
                     name="priority"
                     value={formData.priority}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
@@ -887,7 +887,7 @@ const QuoteManagement: React.FC = () => {
                     name="assigned_to"
                     value={formData.assigned_to}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                   >
                     <option value="">Unassigned</option>
                     {Array.isArray(users) && users.map(user => (
@@ -931,7 +931,7 @@ const QuoteManagement: React.FC = () => {
                       value={formData.estimated_value}
                       onChange={handleFormChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                       placeholder="Enter estimated value"
                     />
                   </div>
@@ -950,7 +950,7 @@ const QuoteManagement: React.FC = () => {
                       value={formData.quoted_amount}
                       onChange={handleFormChange}
                       min="0"
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                       placeholder="Enter quoted amount"
                     />
                   </div>
@@ -968,7 +968,7 @@ const QuoteManagement: React.FC = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter win probability"
                   />
                 </div>
@@ -985,7 +985,7 @@ const QuoteManagement: React.FC = () => {
                     onChange={handleFormChange}
                     min="0"
                     max="100"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                     placeholder="Enter lead score"
                   />
                 </div>
@@ -1442,7 +1442,7 @@ const QuoteManagement: React.FC = () => {
               placeholder="Search quotes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
             />
           </div>
 
@@ -1451,7 +1451,7 @@ const QuoteManagement: React.FC = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
             >
               <option value="all">All Statuses</option>
               <option value="new">New</option>
@@ -1467,7 +1467,7 @@ const QuoteManagement: React.FC = () => {
             <select
               value={projectTypeFilter}
               onChange={(e) => setProjectTypeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
             >
               <option value="all">All Project Types</option>
               {uniqueProjectTypes.map(type => (
@@ -1483,7 +1483,7 @@ const QuoteManagement: React.FC = () => {
             <select
               value={assigneeFilter}
               onChange={(e) => setAssigneeFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-700"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
             >
               <option value="all">All Assignees</option>
               <option value="">Unassigned</option>

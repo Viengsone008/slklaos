@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSelector from '../components/LanguageSelector';
 import { useRouter, usePathname } from 'next/navigation';
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const { t } = useLanguage();
   const router = useRouter();
   const pathname = usePathname();
@@ -73,10 +74,17 @@ const Navbar = () => {
           setIsMobileMenuOpen(false);
         }
       }
+      // Close products dropdown when clicking outside
+      if (isProductsDropdownOpen) {
+        const dropdown = document.querySelector('[data-products-dropdown]');
+        if (dropdown && !dropdown.contains(event.target as Node)) {
+          setIsProductsDropdownOpen(false);
+        }
+      }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isProductsDropdownOpen]);
 
   const handleNavigation = (path: string, sectionId?: string) => {
     if (path === '/' && sectionId) {
@@ -101,11 +109,23 @@ const Navbar = () => {
       }, 50);
     }
     setIsMobileMenuOpen(false);
+    setIsProductsDropdownOpen(false);
   };
   
   const navItems = [
     { name: t('SERVICES'), path: '/services', sectionId: 'services', key: 'SERVICES' },
-    { name: t('PRODUCTS'), path: '/products', sectionId: 'products', key: 'PRODUCTS' },
+    { 
+      name: t('PRODUCTS'), 
+      path: '/products', 
+      sectionId: 'products', 
+      key: 'PRODUCTS',
+      hasDropdown: true,
+      subItems: [
+        { name: t('Waterproofing Materials'), path: '/product-catalogue#waterproofing', key: 'WATERPROOFING_MATERIALS' },
+        { name: t('Flooring Materials'), path: '/product-catalogue#flooring', key: 'FLOORING_MATERIALS' },
+        { name: t('Rocksoil Materials'), path: '/product-catalogue#rocksoil', key: 'ROCKSOIL' }
+      ]
+    },
     { name: t('PROJECTS'), path: '/projects', sectionId: 'projects', key: 'PROJECTS' },
     { name: t('ABOUT US'), path: '/about', sectionId: 'about', key: 'ABOUT US' },
     { name: t('NEWS'), path: '/news', sectionId: 'blog', key: 'NEWS' },
@@ -118,16 +138,18 @@ const Navbar = () => {
     const isDarkSection = currentSection === 'home' || currentSection === 'contact' || pathname !== '/';
     return {
       navBg: isDarkSection 
-        ? 'bg-white/25 backdrop-blur-md border-white/30' 
-        : 'bg-[#1b3d5a]/25 backdrop-blur-md border-[#1b3d5a]/20',
-      logoText: 'text-white drop-shadow-lg',
-      logoSubtext: 'text-white/90 drop-shadow-md',
-      navLinks: isDarkSection 
-        ? 'text-[#1b3d5a] hover:text-[#6dbeb0] drop-shadow-md font-medium' // dark text for light bg
-        : 'text-white hover:text-[#6dbeb0] drop-shadow-md font-medium',    // white text for dark bg
-      mobileButton: 'text-white hover:bg-white/20 drop-shadow-md',
-      mobileLinks: 'text-white/95 hover:bg-white/20 hover:text-[#6dbeb0]',
-      mobileBorder: 'border-white/30'
+        ? 'bg-white/10 backdrop-blur-2xl border border-white/20 shadow-xl shadow-white/10' 
+        : 'bg-black/10 backdrop-blur-2xl border border-white/15 shadow-xl shadow-black/20',
+      logoText: 'text-white drop-shadow-2xl font-bold',
+      logoSubtext: 'text-white drop-shadow-xl font-medium',
+      navLinks: 'text-white hover:text-[#6dbeb0] font-semibold',
+      mobileButton: 'text-white hover:bg-white/10 drop-shadow-xl backdrop-blur-sm',
+      mobileLinks: 'text-white hover:bg-white/10 hover:text-[#6dbeb0] backdrop-blur-sm font-medium',
+      mobileBorder: 'border-white/20',
+      dropdown: isDarkSection 
+        ? 'bg-black/20 backdrop-blur-3xl border border-white/25 shadow-2xl shadow-black/30 text-white'
+        : 'bg-black/20 backdrop-blur-3xl border border-white/20 shadow-2xl shadow-black/30 text-white',
+      dropdownItem: 'text-white hover:text-[#6dbeb0] hover:bg-white/15 hover:shadow-lg backdrop-blur-sm font-medium'
     };
   };
   
@@ -151,7 +173,7 @@ const Navbar = () => {
           : (isVisible ? 'translate-y-0' : '-translate-y-full')
       } lg:translate-y-0`}
     >
-      <div className={`${styles.navBg} border-2 rounded-2xl px-4 md:px-6 py-4 transition-all duration-500 shadow-lg`}>
+      <div className={`${styles.navBg} rounded-3xl px-4 md:px-6 py-4 transition-all duration-500 ring-1 ring-white/10`}>
         <div className="flex items-center justify-between w-full gap-y-4">
           {/* Logo */}
           <div className="flex items-center cursor-pointer" onClick={() => handleNavigation('/', 'home')}>
@@ -163,10 +185,18 @@ const Navbar = () => {
               />
             </div>
             <div>
-              <h1 className={`text-lg font-bold ${styles.logoText} transition-all duration-500`}>
+              <h1 className={`text-lg font-bold ${styles.logoText} transition-all duration-500`}
+                  style={{ 
+                    textShadow: '0 0 12px rgba(184, 184, 184, 0.9), 0 3px 8px rgba(123, 123, 123, 1), 0 0 25px rgba(76, 75, 75, 0.7)',
+                    filter: 'contrast(1.3) brightness(1.2)'
+                  }}>
                 SLK Trading
               </h1>
-              <p className={`text-xs ${styles.logoSubtext} transition-all duration-500`}>
+              <p className={`text-xs ${styles.logoSubtext} transition-all duration-500`}
+                 style={{ 
+                   textShadow: '0 0 10px rgba(97, 95, 95, 0.8), 0 2px 6px rgba(92, 90, 90, 0.9)',
+                   filter: 'contrast(1.2) brightness(1.1)'
+                 }}>
                 & Design Construction
               </p>
             </div> 
@@ -175,17 +205,84 @@ const Navbar = () => {
           {/* Desktop Navigation */}
          <div className="hidden lg:flex items-center space-x-6">
             {navItems.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => handleNavigation(item.path, item.sectionId)}
-                className={`${styles.navLinks} transition-all duration-500 hover:scale-105 relative text-base`}
-                style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }} // for extra visibility
+              <div 
+                key={item.key} 
+                className="relative group" 
+                data-products-dropdown={item.hasDropdown ? true : undefined}
+                onMouseEnter={() => item.hasDropdown && setIsProductsDropdownOpen(true)}
+                onMouseLeave={() => item.hasDropdown && setIsProductsDropdownOpen(false)}
               >
-                <span className="relative z-10">{item.name}</span>
-                {isActiveNavItem(item) && (
-                  <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#6dbeb0] rounded-full"></div>
+                {item.hasDropdown ? (
+                  <div className="relative">
+                    <button
+                      onClick={() => handleNavigation(item.path, item.sectionId)}
+                      className={`${styles.navLinks} transition-all duration-500 hover:scale-105 relative text-base flex items-center`}
+                      style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
+                    >
+                      <span className="relative z-10">{item.name}</span>
+                      <ChevronDown className="ml-1 w-4 h-4 transition-transform duration-200 group-hover:rotate-180" />
+                      {isActiveNavItem(item) && (
+                        <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#6dbeb0] rounded-full"></div>
+                      )}
+                    </button>
+                    
+                    {/* Hover Dropdown Menu */}
+                    {isProductsDropdownOpen && (
+                      <div className={`absolute top-full left-0 mt-1 w-72 ${styles.dropdown} rounded-3xl shadow-2xl py-4 z-50 transform transition-all duration-300 opacity-100 scale-100 ring-1 ring-white/10`}>
+                        {/* Invisible bridge to prevent gap */}
+                        <div className="absolute -top-1 left-0 right-0 h-1 bg-transparent"></div>
+                        
+                        {/* Glassmorphism overlay for extra depth */}
+                        <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                        
+                        {/* Luxury header */}
+                        <div className="relative px-6 pb-3 mb-3 border-b border-white/10">
+                          <p className="text-xs font-semibold opacity-70 uppercase tracking-wider text-white/80">Product Categories</p>
+                          <div className="absolute bottom-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                        </div>
+                        
+                        {item.subItems?.map((subItem, index) => (
+                          <button
+                            key={subItem.key}
+                            onClick={() => handleNavigation(subItem.path)}
+                            className={`group relative block w-full text-left px-6 py-4 mx-2 rounded-2xl ${styles.dropdownItem} transition-all duration-300 text-sm font-medium transform hover:scale-[1.02] hover:-translate-y-0.5 border border-transparent hover:border-white/20`}
+                            style={{
+                              animationDelay: `${index * 50}ms`,
+                              animation: isProductsDropdownOpen ? 'fadeInSlideUp 0.3s ease-out forwards' : 'none'
+                            }}
+                          >
+                            <div className="flex items-center justify-between relative z-10">
+                              <span className="relative">{subItem.name}</span>
+                              <div className="w-2 h-2 rounded-full bg-white/40 group-hover:bg-white/80 transition-all duration-300 group-hover:scale-125"></div>
+                            </div>
+                            {/* Glassmorphism hover effect */}
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"></div>
+                            {/* Subtle glow effect */}
+                            <div className="absolute inset-0 rounded-2xl shadow-lg shadow-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          </button>
+                        ))}
+                        
+                        {/* Luxury footer accent with glassmorphism */}
+                        <div className="relative mt-3 px-6">
+                          <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+                          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-8 h-px bg-white/40 blur-sm"></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handleNavigation(item.path, item.sectionId)}
+                    className={`${styles.navLinks} transition-all duration-500 hover:scale-105 relative text-base`}
+                    style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
+                  >
+                    <span className="relative z-10">{item.name}</span>
+                    {isActiveNavItem(item) && (
+                      <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#6dbeb0] rounded-full"></div>
+                    )}
+                  </button>
                 )}
-              </button>
+              </div>
             ))}
             {/* <LanguageSelector /> */}
             {/* Updated Admin button to link to admin-login page */}
@@ -208,19 +305,55 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className={`lg:hidden mt-4 pt-4 border-t-2 ${styles.mobileBorder} transition-all duration-500 animate-fade-in max-h-[80vh] overflow-y-auto rounded-xl`}>
+          <div className={`lg:hidden mt-4 pt-4 border-t border-white/20 transition-all duration-500 animate-fade-in max-h-[80vh] overflow-y-auto rounded-2xl backdrop-blur-xl bg-white/5 ring-1 ring-white/10`}>
             <div className="space-y-3 px-1">
               {navItems.map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => handleNavigation(item.path, item.sectionId)}
-                  className={`block w-full text-left py-2 px-3 rounded-lg font-medium ${styles.mobileLinks} transition-all duration-500 relative`}
-                >
-                  {item.name}
-                  {isActiveNavItem(item) && (
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6dbeb0] rounded-r-full"></div>
+                <div key={item.key}>
+                  {item.hasDropdown ? (
+                    <div>
+                      <button
+                        onClick={() => handleNavigation(item.path, item.sectionId)}
+                        className={`flex items-center justify-between w-full text-left py-2 px-3 rounded-lg font-medium ${styles.mobileLinks} transition-all duration-500 relative`}
+                      >
+                        {item.name}
+                        {isActiveNavItem(item) && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6dbeb0] rounded-r-full"></div>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setIsProductsDropdownOpen(!isProductsDropdownOpen)}
+                        className={`flex items-center justify-center w-full text-center py-1 px-3 rounded-lg text-sm ${styles.mobileLinks} transition-all duration-500 opacity-75 mt-1`}
+                      >
+                        <span className="mr-1">Sub Categories</span>
+                        <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isProductsDropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {/* Mobile Dropdown */}
+                      {isProductsDropdownOpen && (
+                        <div className="mt-2 ml-4 space-y-1">
+                          {item.subItems?.map((subItem) => (
+                            <button
+                              key={subItem.key}
+                              onClick={() => handleNavigation(subItem.path)}
+                              className={`block w-full text-left py-2 px-3 rounded-lg text-sm ${styles.mobileLinks} transition-all duration-500 opacity-90`}
+                            >
+                              {subItem.name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handleNavigation(item.path, item.sectionId)}
+                      className={`block w-full text-left py-2 px-3 rounded-lg font-medium ${styles.mobileLinks} transition-all duration-500 relative`}
+                    >
+                      {item.name}
+                      {isActiveNavItem(item) && (
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#6dbeb0] rounded-r-full"></div>
+                      )}
+                    </button>
                   )}
-                </button>
+                </div>
               ))}
 
               <div className="py-2 px-3">

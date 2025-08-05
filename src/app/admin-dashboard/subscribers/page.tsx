@@ -435,7 +435,7 @@ const SubscriberManagement = () => {
                 value={formData.email}
                 onChange={handleFormChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
                 placeholder="Enter email address"
               />
             </div>
@@ -449,7 +449,7 @@ const SubscriberManagement = () => {
                 name="status"
                 value={formData.status}
                 onChange={handleFormChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
               >
                 <option value="active">Active</option>
                 <option value="unsubscribed">Unsubscribed</option>
@@ -467,7 +467,7 @@ const SubscriberManagement = () => {
                 name="source"
                 value={formData.source}
                 onChange={handleFormChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
               >
                 <option value="manual">Manual Entry</option>
                 <option value="website">Website</option>
@@ -793,7 +793,7 @@ const SubscriberManagement = () => {
               placeholder="Search by email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700 placeholder-gray-700"
             />
           </div>
 
@@ -802,7 +802,7 @@ const SubscriberManagement = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
             >
               <option value="all">All Statuses</option>
               <option value="active">Active</option>
@@ -817,7 +817,7 @@ const SubscriberManagement = () => {
             <select
               value={sourceFilter}
               onChange={(e) => setSourceFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-700"
             >
               <option value="all">All Sources</option>
               {sources.map(source => (
