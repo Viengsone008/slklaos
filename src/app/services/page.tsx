@@ -129,6 +129,22 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 
 const ServicesPage = () => {
+  const searchParams = useSearchParams();
+  const sharedVideoUrl = searchParams?.get('video');
+  
+  // Show notification if video was shared
+  useEffect(() => {
+    if (sharedVideoUrl) {
+      // Scroll to testimonials section to show the shared video
+      setTimeout(() => {
+        const testimonialsSection = document.getElementById('testimonials');
+        if (testimonialsSection) {
+          testimonialsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 1000);
+    }
+  }, [sharedVideoUrl]);
+
   // Section refs for floating nav
   // (keep only one set of refs, state, and sectionNav)
   const [showNav, setShowNav] = useState(false);
@@ -331,13 +347,60 @@ const ServicesPage = () => {
 
   const { t } = useLanguage();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const slugify = (str: string) =>
     str.toLowerCase().replace(/ & /g, '-').replace(/\s+/g, '-');
 
   useEffect(() => {
     if (!searchParams) return;
+    
+    // Handle shared video parameter
+    const sharedVideoUrl = searchParams.get('video');
+    if (sharedVideoUrl) {
+      // Scroll to testimonials section to show the shared video
+      setTimeout(() => {
+        const testimonialsSection = document.getElementById('testimonials');
+        if (testimonialsSection) {
+          testimonialsSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Show a notification about the shared video
+          const notification = document.createElement('div');
+          notification.innerHTML = `
+            <div style="
+              position: fixed; 
+              top: 20px; 
+              right: 20px; 
+              background: linear-gradient(135deg, #bfa76a, #e5e2d6); 
+              color: #1a2936; 
+              padding: 16px 24px; 
+              border-radius: 12px; 
+              font-weight: bold; 
+              box-shadow: 0 8px 32px rgba(191,167,106,0.3); 
+              z-index: 9999;
+              animation: slideIn 0.3s ease-out;
+            ">
+              🎥 Shared video highlighted below!
+            </div>
+            <style>
+              @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+              }
+            </style>
+          `;
+          document.body.appendChild(notification);
+          
+          // Remove notification after 4 seconds
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 4000);
+        }
+      }, 1500);
+    }
+    
+    // Handle service navigation parameter
     const serviceTitle = searchParams.get('service');
     if (serviceTitle) {
       const id = slugify(serviceTitle);
@@ -810,7 +873,11 @@ const ServicesPage = () => {
             <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
               {/* Enhanced Video 1 */}
               <AnimatedSection animation="fade-right" delay={0}>
-                <div className="group relative backdrop-blur-xl bg-white/80 border border-[#bfa76a]/30 shadow-2xl rounded-3xl p-6 hover:shadow-3xl transition-all duration-500">
+                <div className={`group relative backdrop-blur-xl bg-white/80 border shadow-2xl rounded-3xl p-6 hover:shadow-3xl transition-all duration-500 ${
+                  searchParams?.get('video') === 'https://drive.google.com/file/d/1AZQ8L1kvthSxMqRtWMqvGNKn6JuOnWME/view' 
+                    ? 'border-[#bfa76a] ring-4 ring-[#bfa76a]/50 animate-pulse' 
+                    : 'border-[#bfa76a]/30'
+                }`}>
                   <div className="relative overflow-hidden rounded-2xl mb-6 aspect-video">
                     <iframe
                       width="100%"
@@ -857,13 +924,67 @@ const ServicesPage = () => {
                       <div className="text-[#bfa76a] font-medium text-sm">Design & Construction</div>
                       <div className="text-[#1a2936]/60 text-sm">Vientiane, Laos</div>
                     </div>
+                    
+                    {/* Share Video Button */}
+                    <div className="flex items-center justify-center mt-4 pt-4 border-t border-[#bfa76a]/20">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const videoUrl = "https://drive.google.com/file/d/1AZQ8L1kvthSxMqRtWMqvGNKn6JuOnWME/view";
+                            const shareText = "Check out this amazing luxury villa transformation by SLK Construction! 🏗️✨";
+                            
+                            // Create shareable URL with video parameter
+                            const currentUrl = window.location.origin + window.location.pathname;
+                            const shareableUrl = `${currentUrl}?video=${encodeURIComponent(videoUrl)}`;
+                            
+                            if (navigator.share) {
+                              await navigator.share({
+                                title: "Luxury Villa Transformation - SLK Construction",
+                                text: shareText,
+                                url: shareableUrl
+                              });
+                            } else {
+                              // Fallback: Copy shareable URL to clipboard
+                              await navigator.clipboard.writeText(`${shareText}\n\n${shareableUrl}`);
+                              alert("Shareable link copied to clipboard!");
+                            }
+                          } catch (error) {
+                            // Handle user cancellation or other errors silently
+                            if ((error as Error)?.name !== 'AbortError') {
+                              console.log('Share failed:', error);
+                              // Fallback to clipboard as last resort
+                              try {
+                                const videoUrl = "https://drive.google.com/file/d/1AZQ8L1kvthSxMqRtWMqvGNKn6JuOnWME/view";
+                                const shareText = "Check out this amazing luxury villa transformation by SLK Construction! 🏗️✨";
+                                const currentUrl = window.location.origin + window.location.pathname;
+                                const shareableUrl = `${currentUrl}?video=${encodeURIComponent(videoUrl)}`;
+                                await navigator.clipboard.writeText(`${shareText}\n\n${shareableUrl}`);
+                                alert("Shareable link copied to clipboard!");
+                              } catch (clipboardError) {
+                                console.log('Clipboard fallback failed:', clipboardError);
+                              }
+                            }
+                          }
+                        }}
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] px-4 py-2 rounded-full hover:from-[#e5e2d6] hover:to-[#bfa76a] transition-all duration-300 font-medium text-sm shadow-lg hover:shadow-xl transform hover:scale-105 group"
+                      >
+                        <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                        </svg>
+                        <span>Share Video</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </AnimatedSection>
 
               {/* Enhanced Video 2 */}
               <AnimatedSection animation="fade-left" delay={150}>
-                <div className="group relative backdrop-blur-xl bg-white/80 border border-[#bfa76a]/30 shadow-2xl rounded-3xl p-6 hover:shadow-3xl transition-all duration-500">
+                <div className={`group relative backdrop-blur-xl bg-white/80 border shadow-2xl rounded-3xl p-6 hover:shadow-3xl transition-all duration-500 ${
+                  searchParams?.get('video') === 'https://www.youtube.com/watch?v=9bZkp7q19f0' 
+                    ? 'border-[#bfa76a] ring-4 ring-[#bfa76a]/50 animate-pulse' 
+                    : 'border-[#bfa76a]/30'
+                }`}>
                   <div className="relative overflow-hidden rounded-2xl mb-6 aspect-video">
                     <iframe
                       width="100%"
@@ -909,6 +1030,56 @@ const ServicesPage = () => {
                     <div className="flex items-center justify-between pt-2 border-t border-[#bfa76a]/20">
                       <div className="text-[#bfa76a] font-medium text-sm">Waterproofing Solutions</div>
                       <div className="text-[#1a2936]/60 text-sm">Vientiane Capital</div>
+                    </div>
+                    
+                    {/* Share Video Button */}
+                    <div className="flex items-center justify-center mt-4 pt-4 border-t border-[#bfa76a]/20">
+                      <button
+                        onClick={async () => {
+                          try {
+                            const videoUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0";
+                            const shareText = "Watch this amazing waterproofing success story by SLK Construction! 💧🛡️";
+                            
+                            // Create shareable URL with video parameter
+                            const currentUrl = window.location.origin + window.location.pathname;
+                            const shareableUrl = `${currentUrl}?video=${encodeURIComponent(videoUrl)}`;
+                            
+                            if (navigator.share) {
+                              await navigator.share({
+                                title: "Commercial Waterproofing Success - SLK Construction",
+                                text: shareText,
+                                url: shareableUrl
+                              });
+                            } else {
+                              // Fallback: Copy shareable URL to clipboard
+                              await navigator.clipboard.writeText(`${shareText}\n\n${shareableUrl}`);
+                              alert("Shareable link copied to clipboard!");
+                            }
+                          } catch (error) {
+                            // Handle user cancellation or other errors silently
+                            if ((error as Error)?.name !== 'AbortError') {
+                              console.log('Share failed:', error);
+                              // Fallback to clipboard as last resort
+                              try {
+                                const videoUrl = "https://www.youtube.com/watch?v=9bZkp7q19f0";
+                                const shareText = "Watch this amazing waterproofing success story by SLK Construction! 💧🛡️";
+                                const currentUrl = window.location.origin + window.location.pathname;
+                                const shareableUrl = `${currentUrl}?video=${encodeURIComponent(videoUrl)}`;
+                                await navigator.clipboard.writeText(`${shareText}\n\n${shareableUrl}`);
+                                alert("Shareable link copied to clipboard!");
+                              } catch (clipboardError) {
+                                console.log('Clipboard fallback failed:', clipboardError);
+                              }
+                            }
+                          }
+                        }}
+                        className="inline-flex items-center gap-2 bg-gradient-to-r from-[#bfa76a] to-[#e5e2d6] text-[#1a2936] px-4 py-2 rounded-full hover:from-[#e5e2d6] hover:to-[#bfa76a] transition-all duration-300 font-medium text-sm shadow-lg hover:shadow-xl transform hover:scale-105 group"
+                      >
+                        <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
+                        </svg>
+                        <span>Share Video</span>
+                      </button>
                     </div>
                   </div>
                 </div>
