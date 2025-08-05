@@ -286,12 +286,13 @@ const JobApplications = () => {
           </div>
 
           {/* Stats */}
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-4">
             {[
               { label: 'Total', count: applications.length, color: 'text-gray-600' },
               { label: 'Pending', count: applications.filter(a => a.status === 'pending').length, color: 'text-yellow-600' },
               { label: 'Reviewed', count: applications.filter(a => a.status === 'reviewed').length, color: 'text-blue-600' },
-              { label: 'Shortlisted', count: applications.filter(a => a.status === 'shortlisted').length, color: 'text-green-600' }
+              { label: 'Shortlisted', count: applications.filter(a => a.status === 'shortlisted').length, color: 'text-green-600' },
+              { label: 'Rejected', count: applications.filter(a => a.status === 'rejected').length, color: 'text-red-600' }
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div className={`text-2xl font-bold ${stat.color}`}>{stat.count}</div>
